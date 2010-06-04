@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <parent>
+      <groupId>org.picketlink</groupId>
+      <artifactId>picketlink-integration-tests-parent</artifactId>
+      <version>1.0.3.CR4-SNAPSHOT</version>
+      <relativePath>parent</relativePath>
+   </parent>
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>org.picketlink</groupId>
+   <artifactId>picketlink-integration-tests-pom</artifactId>
+   <packaging>pom</packaging>
+   <name>PicketLink Integration Tests- Aggregator</name>
+   <url>http://jboss.org/picketlink/</url>
+   <description>PicketLink is the identity project for Java projects</description>
+
+   <modules>
+     <module>parent</module>
+     <module>picketlink-saml-tests</module>
+   </modules>
+</project>
