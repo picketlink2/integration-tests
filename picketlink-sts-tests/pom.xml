@@ -21,55 +21,85 @@
       <name>JBoss Inc.</name>
       <url>http://www.jboss.org</url>
    </organization>
-   <properties>
-       <java.endorsed.dirs>${basedir}/src/test/resources/endorsed</java.endorsed.dirs>
-       <SERVICE_1_URL>http://localhost:8080/sales-post/</SERVICE_1_URL>
-       <SERVICE_2_URL>http://localhost:8080/employee-post/</SERVICE_2_URL>
-       <SERVICE_3_URL>http://localhost:8080/sales/</SERVICE_3_URL>
-       <SERVICE_4_URL>http://localhost:8080/employee/</SERVICE_4_URL>
-   </properties>
    <build>
      <plugins>
        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.4.3</version>
-          <configuration>
-            <phase>test</phase>
-           <!--  <skipTests>true</skipTests> -->
-            <printSummary>true</printSummary>
-            <disableXmlReport>false</disableXmlReport>
-            <testFailureIgnore>true</testFailureIgnore>
-            <includes>
-              <include>**/**TestCase.java</include>
-            </includes>
-            <forkMode>pertest</forkMode>
-            <useFile>false</useFile>
-            <trimStackTrace>false</trimStackTrace>
-           </configuration>
-           <executions>
-              <execution>
-                 <id>surefire-it</id>
-                 <phase>test</phase>
-                 <goals>
-                    <goal>test</goal>
-                 </goals>
-                 <configuration>
-                    <skip>false</skip>
-                 </configuration>
-               </execution>
-             </executions>
+         <artifactId>maven-surefire-plugin</artifactId>
+         <version>2.4.3</version>
+         <configuration>
+           <phase>test</phase>
+           <includes>
+             <include>**/**TestCase.java</include>
+           </includes>
+           <forkMode>pertest</forkMode>
+           <trimStackTrace>false</trimStackTrace>
+           <reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
+         </configuration>
+         <executions>
+           <execution>
+             <id>surefire-it-metro</id>
+             <phase>pre-integration-test</phase>
+             <goals>
+               <goal>test</goal>
+             </goals>
+             <configuration>
+               <skip>false</skip>
+               <reportsDirectory>${project.build.directory}/surefire-reports-metro</reportsDirectory>
+             </configuration>
+           </execution>
+           <execution>
+             <id>surefire-it-cxf</id>
+             <phase>post-integration-test</phase>
+             <goals>
+               <goal>test</goal>
+             </goals>
+             <configuration>
+               <skip>false</skip>
+               <reportsDirectory>${project.build.directory}/surefire-reports-cxf</reportsDirectory>
+             </configuration>
+           </execution>
+         </executions>
         </plugin>
         <plugin>
           <artifactId>maven-antrun-plugin</artifactId>
           <executions>
-           <execution>
-             <id>phase-1</id>
-             <phase>compile</phase>
+            <execution>
+              <id>phase-1</id>
+              <phase>compile</phase>
+              <configuration>
+                <tasks>
+                 <property name="version" value="${version}"/>
+                 <property name="depclasspath" refid="maven.dependency.classpath"/>
+                 <property name="localRepository" value="${user.home}/.m2/repository"/>
+                 <ant antfile="${basedir}/ant-build.xml" target="install-jboss" />
+                 <ant antfile="${basedir}/ant-build.xml" target="start-jboss" />
+                </tasks>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>phase-2</id>
+              <phase>test</phase>
+              <configuration>
+                <tasks>
+                 <ant antfile="${basedir}/ant-build.xml" target="stop-jboss" />
+                 <ant antfile="${basedir}/ant-build.xml" target="install-jbws-metro"/>
+                 <ant antfile="${basedir}/ant-build.xml" target="start-jboss" />
+                </tasks>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+            <execution>
+             <id>phase-3</id>
+             <phase>pre-integration-test</phase>
              <configuration>
                 <tasks>
-                 <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${version}"/>
-                 <property name="localRepository" value="${user.home}/.m2/repository"/>
+                 <ant antfile="${basedir}/ant-build.xml" target="stop-jboss" />
+                 <ant antfile="${basedir}/ant-build.xml" target="install-jbws-cxf"/>
                  <ant antfile="${basedir}/ant-build.xml" target="start-jboss" />
                 </tasks>
              </configuration>
@@ -78,13 +108,10 @@
              </goals>
             </execution>
             <execution>
-             <id>phase-2</id>
-             <phase>integration-test</phase>
+             <id>phase-4</id>
+             <phase>post-integration-test</phase>
              <configuration>
                 <tasks>
-                 <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${version}"/>
-                 <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/ant-build.xml" target="stop-jboss" />
                 </tasks>
              </configuration>
