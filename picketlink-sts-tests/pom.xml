@@ -43,7 +43,7 @@
                <goal>test</goal>
              </goals>
              <configuration>
-               <skip>false</skip>
+               <skip>true</skip>
                <reportsDirectory>${project.build.directory}/surefire-reports-metro</reportsDirectory>
              </configuration>
            </execution>
