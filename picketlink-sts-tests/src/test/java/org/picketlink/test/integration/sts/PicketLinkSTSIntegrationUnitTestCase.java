@@ -40,7 +40,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.picketlink.identity.federation.api.wstrust.WSTrustClient;
 import org.picketlink.identity.federation.api.wstrust.WSTrustClient.SecurityInfo;
-import org.picketlink.identity.federation.core.util.Base64;
 import org.picketlink.identity.federation.core.wstrust.WSTrustConstants;
 import org.picketlink.identity.federation.core.wstrust.WSTrustUtil;
 import org.picketlink.identity.federation.core.wstrust.plugins.saml.SAMLUtil;
@@ -302,9 +301,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       request.setKeyType(URI.create(WSTrustConstants.KEY_TYPE_PUBLIC));
 
       // include a UseKey section that specifies the certificate in the request.
-      byte[] base64EncodedCert = Base64.encodeBytes(certificate.getEncoded()).getBytes();
       JAXBElement<byte[]> certElement = new org.picketlink.identity.xmlsec.w3.xmldsig.ObjectFactory()
-            .createX509DataTypeX509Certificate(base64EncodedCert);
+            .createX509DataTypeX509Certificate(certificate.getEncoded());
       UseKeyType useKey = new UseKeyType();
       useKey.setAny(certElement);
       request.setUseKey(useKey);
@@ -575,14 +573,12 @@ public class PicketLinkSTSIntegrationUnitTestCase
             Assert.assertEquals("Unexpected key value content type", RSAKeyValueType.class, rsaKeyValueElement
                   .getDeclaredType());
             RSAKeyValueType rsaKeyValue = (RSAKeyValueType) rsaKeyValueElement.getValue();
-            byte[] encodedModulus = rsaKeyValue.getModulus();
-            byte[] encodedExponent = rsaKeyValue.getExponent();
 
             // reconstruct the public key and check if it matches the public key of the provided certificate.
-            BigInteger decodedModulus = new BigInteger(1, Base64.decode(encodedModulus, 0, encodedModulus.length));
-            BigInteger decodedExponent = new BigInteger(1, Base64.decode(encodedExponent, 0, encodedExponent.length));
+            BigInteger modulus = new BigInteger(1, rsaKeyValue.getModulus());
+            BigInteger exponent = new BigInteger(1, rsaKeyValue.getExponent());
             KeyFactory factory = KeyFactory.getInstance("RSA");
-            RSAPublicKeySpec spec = new RSAPublicKeySpec(decodedModulus, decodedExponent);
+            RSAPublicKeySpec spec = new RSAPublicKeySpec(modulus, exponent);
             RSAPublicKey genKey = (RSAPublicKey) factory.generatePublic(spec);
             Assert.assertEquals("Invalid public key", certificate.getPublicKey(), genKey);
          }
@@ -601,8 +597,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
             byte[] encodedCertificate = (byte[]) x509CertElement.getValue();
 
             // reconstruct the certificate and check if it matches the provided certificate.
-            byte[] decodedCertificate = Base64.decode(encodedCertificate, 0, encodedCertificate.length);
-            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(decodedCertificate);
+            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(encodedCertificate);
             Assert.assertEquals("Invalid certificate in key info", certificate, CertificateFactory.getInstance("X.509")
                   .generateCertificate(byteInputStream));
          }
