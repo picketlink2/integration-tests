@@ -40,6 +40,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.picketlink.identity.federation.api.wstrust.WSTrustClient;
 import org.picketlink.identity.federation.api.wstrust.WSTrustClient.SecurityInfo;
+import org.picketlink.identity.federation.core.util.Base64;
 import org.picketlink.identity.federation.core.wstrust.WSTrustConstants;
 import org.picketlink.identity.federation.core.wstrust.WSTrustUtil;
 import org.picketlink.identity.federation.core.wstrust.plugins.saml.SAMLUtil;
@@ -260,12 +261,11 @@ public class PicketLinkSTSIntegrationUnitTestCase
       byte[] clientSecret = WSTrustUtil.createRandomSecret(16);
       BinarySecretType clientBinarySecret = new BinarySecretType();
       clientBinarySecret.setType(WSTrustConstants.BS_TYPE_NONCE);
-      clientBinarySecret.setValue(clientSecret);
+      clientBinarySecret.setValue(Base64.encodeBytes(clientSecret).getBytes());
 
       // set the client secret in the client entropy.
       EntropyType clientEntropy = new EntropyType();
-      clientEntropy.getAny().add(
-            new org.picketlink.identity.federation.ws.trust.ObjectFactory().createBinarySecret(clientBinarySecret));
+      clientEntropy.getAny().add(clientBinarySecret);
       request.setEntropy(clientEntropy);
 
       // dispatch the request and get the issued assertion.
@@ -301,10 +301,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       request.setKeyType(URI.create(WSTrustConstants.KEY_TYPE_PUBLIC));
 
       // include a UseKey section that specifies the certificate in the request.
-      JAXBElement<byte[]> certElement = new org.picketlink.identity.xmlsec.w3.xmldsig.ObjectFactory()
-            .createX509DataTypeX509Certificate(certificate.getEncoded());
       UseKeyType useKey = new UseKeyType();
-      useKey.setAny(certElement);
+      useKey.setAny(Base64.encodeBytes(certificate.getEncoded()).getBytes());
       request.setUseKey(useKey);
 
       // dispatch the request and get the issued assertion.
@@ -339,7 +337,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       // include a UseKey section that sets the public key in the request.
       KeyValueType keyValue = WSTrustUtil.createKeyValue(certificate.getPublicKey());
       UseKeyType useKey = new UseKeyType();
-      useKey.setAny(new org.picketlink.identity.xmlsec.w3.xmldsig.ObjectFactory().createKeyValue(keyValue));
+      useKey.setAny(keyValue);
       request.setUseKey(useKey);
 
       // dispatch the request and get the issued assertion.
