@@ -30,7 +30,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.ws.WebServiceException;
 
@@ -44,7 +43,7 @@ import org.picketlink.identity.federation.core.util.Base64;
 import org.picketlink.identity.federation.core.wstrust.WSTrustConstants;
 import org.picketlink.identity.federation.core.wstrust.WSTrustUtil;
 import org.picketlink.identity.federation.core.wstrust.plugins.saml.SAMLUtil;
-import org.picketlink.identity.federation.core.wstrust.wrappers.RequestSecurityToken; 
+import org.picketlink.identity.federation.core.wstrust.wrappers.RequestSecurityToken;
 import org.picketlink.identity.federation.newmodel.saml.v2.assertion.AssertionType;
 import org.picketlink.identity.federation.newmodel.saml.v2.assertion.AudienceRestrictionType;
 import org.picketlink.identity.federation.newmodel.saml.v2.assertion.ConditionAbstractType;
@@ -59,8 +58,8 @@ import org.picketlink.identity.federation.ws.trust.UseKeyType;
 import org.picketlink.identity.xmlsec.w3.xmldsig.KeyInfoType;
 import org.picketlink.identity.xmlsec.w3.xmldsig.KeyValueType;
 import org.picketlink.identity.xmlsec.w3.xmldsig.RSAKeyValueType;
+import org.picketlink.identity.xmlsec.w3.xmldsig.X509CertificateType;
 import org.picketlink.identity.xmlsec.w3.xmldsig.X509DataType;
-import org.picketlink.identity.xmlsec.w3.xmlenc.EncryptedKeyType;
 import org.w3c.dom.Element;
 
 /**
@@ -122,7 +121,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * 
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueSAML20() throws Exception
@@ -135,7 +135,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
 
       // in this scenario, the conditions section should NOT have an audience restriction.
       ConditionsType conditionsType = assertion.getConditions();
-      
+
       List<ConditionAbstractType> conditions = conditionsType.getConditions();
       Assert.assertEquals("Unexpected restriction list size", 0, conditions.size());
    }
@@ -147,7 +147,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * case, the request should be handled by the standard {@code SAML20TokenProvider}.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueSAML20AppliesTo() throws Exception
@@ -161,14 +162,14 @@ public class PicketLinkSTSIntegrationUnitTestCase
       // in this scenario, the conditions section should have an audience restriction.
       ConditionsType conditionsType = assertion.getConditions();
       List<ConditionAbstractType> conditions = conditionsType.getConditions();
-      
+
       Assert.assertEquals("Unexpected restriction list size", 1, conditions.size());
       ConditionAbstractType abstractType = conditions.get(0);
       Assert.assertTrue("Unexpected restriction type", abstractType instanceof AudienceRestrictionType);
       AudienceRestrictionType audienceRestriction = (AudienceRestrictionType) abstractType;
       Assert.assertEquals("Unexpected audience restriction list size", 1, audienceRestriction.getAudience().size());
       Assert.assertEquals("Unexpected audience restriction item", "http://services.testcorp.org/provider1",
-            audienceRestriction.getAudience().get(0));
+            audienceRestriction.getAudience().get(0).toString());
 
    }
 
@@ -179,7 +180,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * the request).
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueSAML20OnBehalfOf() throws Exception
@@ -211,7 +213,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * this key as the proof token. The WS-Trust response should contain the STS-generated key.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueSAML20WithSTSGeneratedSymmetricKey() throws Exception
@@ -231,7 +234,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
-      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0);
+      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
+            .get(0);
       this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_SYMMETRIC, null, false);
 
       // TODO: client API must allow access to the WS-Trust response for retrieval of the proof token.
@@ -245,7 +249,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * should include the STS key to allow reconstruction of the combined key and the algorithm used to combine the keys.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueSAML20WithCombinedSymmetricKey() throws Exception
@@ -277,7 +282,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
-      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0) ;
+      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
+            .get(0);
       this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_SYMMETRIC, null, false);
 
       // TODO: client API must allow access to the WS-Trust response for retrieval of the server entropy and algorithm.
@@ -289,7 +295,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * The STS must include the specified certificate in the SAML subject confirmation.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueSAML20WithCertificate() throws Exception
@@ -312,7 +319,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
-      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0);
+      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
+            .get(0);
       this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_PUBLIC, certificate, false);
    }
 
@@ -322,7 +330,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * STS must include the specified public key in the SAML subject confirmation.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueSAML20WithPublicKey() throws Exception
@@ -346,7 +355,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
-      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation().get(0);
+      SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
+            .get(0);
       this.validateHolderOfKeyContents(subjConfirmation, WSTrustConstants.KEY_TYPE_PUBLIC, certificate, true);
    }
 
@@ -356,7 +366,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * assertion renewed (i.e. get a new assertion with an updated lifetime).
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testRenewSAML20() throws Exception
@@ -390,7 +401,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * the assertion validated, checking the validation results.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testValidateSAML20() throws Exception
@@ -415,7 +427,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * the assertion. A canceled assertion cannot be renewed or considered valid anymore.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testCancelSAML20() throws Exception
@@ -453,7 +466,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * security token service.
     * </p>
     * 
-    * @throws Exception if an error occurs while running the test.
+    * @throws Exception
+    *            if an error occurs while running the test.
     */
    @Test
    public void testIssueUnknownTokenType() throws Exception
@@ -477,12 +491,16 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * Validates the contents of the specified SAML 2.0 assertion.
     * </p>
     * 
-    * @param assertionElement the SAML 2.0 assertion to be validated.
-    * @param assertionPrincipal the principal that is expected to be seen in the assertion subject.
-    * @param confirmationMethod the expected confirmation method.
+    * @param assertionElement
+    *           the SAML 2.0 assertion to be validated.
+    * @param assertionPrincipal
+    *           the principal that is expected to be seen in the assertion subject.
+    * @param confirmationMethod
+    *           the expected confirmation method.
     * @return The SAML assertion JAXB representation. This object can be used by the test methods to perform extra
     *         validations depending on the scenario being tested.
-    * @throws Exception if an error occurs while validating the assertion.
+    * @throws Exception
+    *            if an error occurs while validating the assertion.
     */
    private AssertionType validateSAML20Assertion(Element assertionElement, String assertionPrincipal,
          String confirmationMethod) throws Exception
@@ -497,14 +515,14 @@ public class PicketLinkSTSIntegrationUnitTestCase
 
       // validate the assertion subject.
       Assert.assertNotNull("Unexpected null subject", assertion.getSubject());
-      
+
       SubjectType subject = assertion.getSubject();
       NameIDType nameID = (NameIDType) subject.getSubType().getBaseID();
-      
+
       Assert.assertEquals("Unexpected name id qualifier", "urn:picketlink:identity-federation", nameID
             .getNameQualifier());
-      Assert.assertEquals("Unexpected name id value", assertionPrincipal, nameID.getValue()); 
-      SubjectConfirmationType subjType = (SubjectConfirmationType) subject.getSubType().getConfirmation().get(0);
+      Assert.assertEquals("Unexpected name id value", assertionPrincipal, nameID.getValue());
+      SubjectConfirmationType subjType = (SubjectConfirmationType) subject.getConfirmation().get(0);
       Assert.assertEquals("Unexpected confirmation method", confirmationMethod, subjType.getMethod());
 
       // validate the assertion conditions.
@@ -524,33 +542,33 @@ public class PicketLinkSTSIntegrationUnitTestCase
     * confirmation method has been used.
     * </p>
     * 
-    * @param subjectConfirmation the {@code SubjectConfirmationType} to be validated.
-    * @param keyType the type of the proof-of-possession key (Symmetric or Public).
-    * @param certificate the certificate used in the Public Key scenarios.
-    * @param usePublicKey {@code true} if the certificate's Public Key was used as the proof-of-possession token;
-    *           {@code false} otherwise.
-    * @throws Exception if an error occurs while performing the validation.
+    * @param subjectConfirmation
+    *           the {@code SubjectConfirmationType} to be validated.
+    * @param keyType
+    *           the type of the proof-of-possession key (Symmetric or Public).
+    * @param certificate
+    *           the certificate used in the Public Key scenarios.
+    * @param usePublicKey
+    *           {@code true} if the certificate's Public Key was used as the proof-of-possession token; {@code false}
+    *           otherwise.
+    * @throws Exception
+    *            if an error occurs while performing the validation.
     */
    private void validateHolderOfKeyContents(SubjectConfirmationType subjectConfirmation, String keyType,
          Certificate certificate, boolean usePublicKey) throws Exception
    {
       SubjectConfirmationDataType subjConfirmationDataType = subjectConfirmation.getSubjectConfirmationData();
       Assert.assertNotNull("Unexpected null subject confirmation data", subjConfirmationDataType);
-      throw new RuntimeException( "FIX" );
-      /*List<Object> confirmationContent = subjConfirmationDataType.getContent();
-      Assert.assertEquals("Unexpected subject confirmation content size", 1, confirmationContent.size());
-      JAXBElement<?> keyInfoElement = (JAXBElement<?>) confirmationContent.get(0);
-      Assert.assertEquals("Unexpected subject confirmation context type", KeyInfoType.class, keyInfoElement
-            .getDeclaredType());
-      KeyInfoType keyInfo = (KeyInfoType) keyInfoElement.getValue();
+
+      KeyInfoType keyInfo = (KeyInfoType) subjConfirmationDataType.getAnyType();
       Assert.assertEquals("Unexpected key info content size", 1, keyInfo.getContent().size());
 
       // if the key is a symmetric key, the KeyInfo should contain an encrypted element.
       if (WSTrustConstants.KEY_TYPE_SYMMETRIC.equals(keyType))
       {
-         JAXBElement<?> encKeyElement = (JAXBElement<?>) keyInfo.getContent().get(0);
-         Assert.assertEquals("Unexpected key info content type", EncryptedKeyType.class, encKeyElement
-               .getDeclaredType());
+         Element encKeyElement = (Element) keyInfo.getContent().get(0);
+         Assert.assertEquals("Unexpected key info content type", WSTrustConstants.XMLEnc.ENCRYPTED_KEY, encKeyElement
+               .getLocalName());
       }
       // if the key is public, KeyInfo should either contain an encoded certificate or an encoded public key.
       else if (WSTrustConstants.KEY_TYPE_PUBLIC.equals(keyType))
@@ -558,20 +576,15 @@ public class PicketLinkSTSIntegrationUnitTestCase
          // if the public key has been used as proof, we should be able to retrieve it from KeyValueType.
          if (usePublicKey == true)
          {
-            JAXBElement<?> keyValueElement = (JAXBElement<?>) keyInfo.getContent().get(0);
-            Assert.assertEquals("Unexpected key info content type", KeyValueType.class, keyValueElement
-                  .getDeclaredType());
-            KeyValueType keyValue = (KeyValueType) keyValueElement.getValue();
+            KeyValueType keyValue = (KeyValueType) keyInfo.getContent().get(0);
             List<Object> keyValueContent = keyValue.getContent();
             Assert.assertEquals("Unexpected key value content size", 1, keyValueContent.size());
-            JAXBElement<?> rsaKeyValueElement = (JAXBElement<?>) keyValue.getContent().get(0);
-            Assert.assertEquals("Unexpected key value content type", RSAKeyValueType.class, rsaKeyValueElement
-                  .getDeclaredType());
-            RSAKeyValueType rsaKeyValue = (RSAKeyValueType) rsaKeyValueElement.getValue();
+            Assert.assertEquals("Unexpected key value content type", RSAKeyValueType.class, keyValueContent.get(0).getClass());
+            RSAKeyValueType rsaKeyValue = (RSAKeyValueType) keyValueContent.get(0);
 
             // reconstruct the public key and check if it matches the public key of the provided certificate.
-            BigInteger modulus = new BigInteger(1, rsaKeyValue.getModulus());
-            BigInteger exponent = new BigInteger(1, rsaKeyValue.getExponent());
+            BigInteger modulus = new BigInteger(1, Base64.decode(new String(rsaKeyValue.getModulus())));
+            BigInteger exponent = new BigInteger(1, Base64.decode(new String(rsaKeyValue.getExponent())));
             KeyFactory factory = KeyFactory.getInstance("RSA");
             RSAPublicKeySpec spec = new RSAPublicKeySpec(modulus, exponent);
             RSAPublicKey genKey = (RSAPublicKey) factory.generatePublic(spec);
@@ -580,22 +593,19 @@ public class PicketLinkSTSIntegrationUnitTestCase
          // if the whole certificate was used as proof, we should be able to retrieve it from X509DataType.
          else
          {
-            JAXBElement<?> x509DataElement = (JAXBElement<?>) keyInfo.getContent().get(0);
-            Assert.assertEquals("Unexpected key info content type", X509DataType.class, x509DataElement
-                  .getDeclaredType());
-            X509DataType x509Data = (X509DataType) x509DataElement.getValue();
+            X509DataType x509Data = (X509DataType) keyInfo.getContent().get(0);
             Assert.assertEquals("Unexpected X509 data content size", 1, x509Data
                   .getX509IssuerSerialOrX509SKIOrX509SubjectName().size());
-            JAXBElement<?> x509CertElement = (JAXBElement<?>) x509Data.getX509IssuerSerialOrX509SKIOrX509SubjectName()
-                  .get(0);
-            Assert.assertEquals("Unexpected X509 data content type", byte[].class, x509CertElement.getDeclaredType());
-            byte[] encodedCertificate = (byte[]) x509CertElement.getValue();
+            Object content = x509Data.getX509IssuerSerialOrX509SKIOrX509SubjectName().get(0);
+            Assert.assertTrue("Unexpected X509 data content type", content instanceof X509CertificateType);
+            byte[] encodedCertificate = ((X509CertificateType) content).getEncodedCertificate();
 
             // reconstruct the certificate and check if it matches the provided certificate.
-            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(encodedCertificate);
+            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(Base64.decode(encodedCertificate, 0,
+                  encodedCertificate.length));
             Assert.assertEquals("Invalid certificate in key info", certificate, CertificateFactory.getInstance("X.509")
                   .generateCertificate(byteInputStream));
          }
-      }*/
+      }
    }
 }
