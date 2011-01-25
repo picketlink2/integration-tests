@@ -30,6 +30,7 @@
     <copy file="${localRepository}/org/picketlink/picketlink-bindings-jboss/${version}/picketlink-bindings-jboss-${version}.jar" todir="${TOMCAT_LIB}"/>
     <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${TOMCAT_LIB}"/>
 
+    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${TOMCAT_LIB}"/>
     <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
            dest="${TOMCAT_DEPLOY}"/>
 
@@ -54,6 +55,7 @@
     <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${JBAS_DEPLOY}/picketlink"/>
     <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
            dest="${JBAS_DEPLOY}"/>
+    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${JBAS_DEPLOY}/picketlink"/>
 
     <chmod file="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" perm="700"/>
   </target>
