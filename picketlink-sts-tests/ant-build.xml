@@ -6,6 +6,7 @@
   <property name="JBWS_METRO_HOME" location="${basedir}/target/jbossws-metro-bin-dist/"/>
   <property name="JBWS_CXF_ZIP" location="${basedir}/../common-dist/jbossws/3.3.1.GA/jbossws-cxf-3.3.1.GA.zip"/>
   <property name="JBWS_CXF_HOME" location="${basedir}/target/jbossws-cxf-bin-dist/"/>
+  <property environment="env" />
 
   <target name="install-jboss">
     <echo>Installing JBOSS AS 5.1.0.GA</echo>
@@ -44,14 +45,15 @@
      <unzip src="${JBWS_METRO_ZIP}" dest="${basedir}/target"/>
      <!-- Copy the ant.properties file that will be used by JBoss WS installation -->
      <copy file="${basedir}/../common-dist/jbossws/ant.properties" todir="${JBWS_METRO_HOME}"/>
-     <!-- Invoke the installation ant target -->
+     <!-- Invoke the installation ant target 
      <exec executable="ant">
        <arg value="-q"/>
        <arg value="-f"/>
        <arg value="${JBWS_METRO_HOME}/build.xml"/>
        <arg value="deploy-jboss510"/>
      </exec>
-     <!--ant dir="${JBWS_METRO_HOME}" target="deploy-jboss510" output="installation.out"/-->
+     -->
+     <ant dir="${JBWS_METRO_HOME}" target="deploy-jboss510" output="installation.out"/>
   </target>
 
   <target name="install-jbws-cxf">
@@ -61,12 +63,15 @@
      <!-- Copy the ant.properties file that will be used by JBoss WS installation -->
      <copy file="${basedir}/../common-dist/jbossws/ant.properties" todir="${JBWS_CXF_HOME}"/>
      <!-- Invoke the installation ant target -->
+     <ant dir="${JBWS_CXF_HOME}" target="deploy-jboss510" /> 
+    <!--
      <exec executable="ant">
        <arg value="-q"/>
        <arg value="-f"/>
        <arg value="${JBWS_CXF_HOME}/build.xml"/>
        <arg value="deploy-jboss510"/>
      </exec>
+     -->
      <!--ant dir="${JBWS_CXF_HOME}" target="deploy-jboss510" output="installation.out"/-->
   </target>
 </project>
