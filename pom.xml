@@ -17,5 +17,6 @@
      <module>parent</module>
      <module>picketlink-saml-tests</module>
      <module>picketlink-sts-tests</module>
+     <module>picketlink-openid-tests</module>
    </modules>
 </project>
