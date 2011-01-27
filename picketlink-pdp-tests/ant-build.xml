@@ -1,0 +1,40 @@
+<project default="install-jboss" name="PicketLink Federation Integration Test Suite">
+
+  <property name="JBAS_ZIP" location="${basedir}/../common-dist/jbossas/5.1.0.GA/jboss-5.1.0.GA-jdk6.zip"/>
+  <property name="JBAS_DEPLOY" location="${basedir}/target/jboss-5.1.0.GA/server/default/deploy/" />
+  <property name="OPENID4JAVA_VERSION" value="0.9.5" />
+   
+  <property environment="env" />
+
+  <target name="install-jboss">
+    <echo>Installing JBOSS AS 5.1.0.GA</echo>
+    <unzip src="${JBAS_ZIP}" dest="${basedir}/target"/>
+
+    <!-- Copy PicketLink jars and webapps to JBoss AS -->
+    <mkdir dir="${JBAS_DEPLOY}/picketlink" />
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings/${version}/picketlink-bindings-${version}.jar" todir="${JBAS_DEPLOY}/picketlink"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings-jboss/${version}/picketlink-bindings-jboss-${version}.jar" todir="${JBAS_DEPLOY}/picketlink"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${JBAS_DEPLOY}/picketlink"/>
+    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/${OPENID4JAVA_VERSION}/openid4java-nodeps-${OPENID4JAVA_VERSION}.jar" todir="${JBAS_DEPLOY}/picketlink"/>
+    <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
+           dest="${JBAS_DEPLOY}"/>
+    <chmod file="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" perm="700"/>
+  </target>
+
+  <target name="start-jboss">
+    <echo>Starting Local 8080</echo>
+    <exec executable="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" 
+          osfamily="unix" spawn="true" />
+    <waitfor maxwait="1" maxwaitunit="minute"
+             checkevery="100" checkeveryunit="millisecond">
+      <http url="http://localhost:8080" />
+    </waitfor>
+    <echo>Local 8080 Started</echo> 
+  </target>
+
+  <target name="stop-jboss">
+    <echo>Stopping Local 8080</echo>
+    <echo>Going to Kill the JBoss Process</echo>
+    <exec executable="${basedir}/../common-dist/scripts/stopjboss.sh"  osfamily="unix"/>
+  </target>
+</project>
