@@ -69,7 +69,7 @@
              <configuration>
                 <tasks>
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${version}"/>
+                 <property name="version" value="${project.version}"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/ant-build.xml" target="start-jboss" />
                 </tasks>
