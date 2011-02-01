@@ -455,8 +455,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       }
       catch (WebServiceException we)
       {
-         /*Assert.assertEquals("Unexpected exception message", "Exception in handling token request: Assertion with id "
-               + assertionElement.getAttribute("ID") + " has been canceled and cannot be renewed", we.getMessage());*/
+         Assert.assertEquals("Unexpected exception message", "Exception in handling token request: Assertion with id "
+               + assertionElement.getAttribute("ID") + " has been canceled and cannot be renewed", we.getMessage());
       }
    }
 
@@ -480,9 +480,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
       }
       catch (WebServiceException we)
       {
-         /*Assert.assertEquals("Unexpected exception message",
-               "Exception in handling token request: Unable to find a token provider for the token request", we
-                     .getMessage());*/
+         Assert.assertTrue("Unexpected exception message", we.getMessage().startsWith(
+               "Exception in handling token request: No Security Token Provider found in configuration:"));
       }
    }
 
@@ -579,7 +578,8 @@ public class PicketLinkSTSIntegrationUnitTestCase
             KeyValueType keyValue = (KeyValueType) keyInfo.getContent().get(0);
             List<Object> keyValueContent = keyValue.getContent();
             Assert.assertEquals("Unexpected key value content size", 1, keyValueContent.size());
-            Assert.assertEquals("Unexpected key value content type", RSAKeyValueType.class, keyValueContent.get(0).getClass());
+            Assert.assertEquals("Unexpected key value content type", RSAKeyValueType.class, keyValueContent.get(0)
+                  .getClass());
             RSAKeyValueType rsaKeyValue = (RSAKeyValueType) keyValueContent.get(0);
 
             // reconstruct the public key and check if it matches the public key of the provided certificate.
