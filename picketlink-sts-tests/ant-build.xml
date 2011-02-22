@@ -19,6 +19,8 @@
     <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${JBAS_DEPLOY}/picketlink"/>
     <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
            dest="${JBAS_DEPLOY}"/>
+    <!-- the following props file needs to be copied to JBAS conf and is used by the cache invalidation test -->
+    <copy file="${basedir}/src/test/resources/sts-config.properties" todir="${JBAS_DEPLOY}/../conf/"/>
     <chmod file="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" perm="700"/>
   </target>
 
@@ -26,7 +28,7 @@
     <echo>Starting Local 8080</echo>
     <exec executable="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" 
           osfamily="unix" spawn="true" />
-    <waitfor maxwait="1" maxwaitunit="minute"
+    <waitfor maxwait="2" maxwaitunit="minute"
              checkevery="100" checkeveryunit="millisecond">
       <http url="http://localhost:8080" />
     </waitfor>
