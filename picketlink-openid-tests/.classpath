@@ -12,6 +12,7 @@
   <classpathentry kind="var" path="M2_REPO/cssparser/cssparser/0.9.4/cssparser-0.9.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/htmlunit/htmlunit/2.1/htmlunit-2.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/rhino/js/1.6R7/js-1.6R7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/jstl/jstl/1.2/jstl-1.2.jar" sourcepath="M2_REPO/jstl/jstl/1.2/jstl-1.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.4/junit-4.4.jar" sourcepath="M2_REPO/junit/junit/4.4/junit-4.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/nekohtml/nekohtml/1.9.12/nekohtml-1.9.12.jar"/>
   <classpathentry kind="var" path="M2_REPO/xalan/serializer/2.7.1/serializer-2.7.1.jar"/>

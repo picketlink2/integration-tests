@@ -1,0 +1,165 @@
+<project default="init" name="PicketLink Federation Integration Test Suite">
+   <taskdef resource="net/sf/antcontrib/antlib.xml">
+     <classpath path="${depclasspath}"/>
+   </taskdef>
+   <property name="JBAS5_DEPLOY" location="${basedir}/target/jboss-5.1.0.GA/server/default/deploy/" />
+   <property name="JBAS6_DEPLOY" location="${basedir}/target/jboss-6.0.0.Final/server/default/deploy/" />
+   <property name="TOMCAT6" location="${basedir}/target/apache-tomcat-6.0.26/" />
+   <property name="TOMCAT6_DEPLOY" location="${basedir}/target/apache-tomcat-6.0.26/webapps/" />
+   <property name="TOMCAT6_LIB" location="${basedir}/target/apache-tomcat-6.0.26/lib/" />
+   <property environment="env" />
+
+  <target name="init-jboss5">
+    <!-- Unzip JBoss AS5 -->
+    <echo>Unzip JBOSS AS 5.1.0.GA</echo>
+    <unzip src="${basedir}/../common-dist/jbossas/5.1.0.GA/jboss-5.1.0.GA-jdk6.zip"
+           dest="${basedir}/target"/>
+  </target>
+
+  <target name="init-jboss6">
+    <!-- Unzip JBoss AS6 -->
+    <echo>Unzip JBOSS AS 6.0.0.Final</echo>
+    <unzip src="${basedir}/../common-dist/jbossas/6.0/jboss-as-distribution-6.0.0.Final.zip"
+           dest="${basedir}/target"/>
+  </target>
+
+  <target name="init-tomcat6">
+    <echo>Unzip Apache Tomcat 6.0.26</echo>
+    <unzip src="${basedir}/../common-dist/tomcat/6.0.26/apache-tomcat-6.0.26.zip"
+           dest="${basedir}/target"/>
+  </target>
+
+
+  <target name="tomcat6-thirdparty-deps" depends="init-tomcat6" >
+    <copy file="${localRepository}/apache-log4j/log4j/1.2.14/log4j-1.2.14.jar" todir="${TOMCAT6_LIB}"/>
+  </target>
+
+  <target name="copy-picketlink-tomcat6" depends="tomcat6-thirdparty-deps" >
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings/${version}/picketlink-bindings-${version}.jar" todir="${TOMCAT6_LIB}"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings-jboss/${version}/picketlink-bindings-jboss-${version}.jar" todir="${TOMCAT6_LIB}"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${TOMCAT6_LIB}"/>
+
+    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${TOMCAT6_LIB}"/>
+    <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
+           dest="${TOMCAT6_DEPLOY}"/>
+
+     <move todir="${TOMCAT6_DEPLOY}">
+        <fileset dir="${TOMCAT6_DEPLOY}/picketlink">
+          <include name="**/*.war"/>
+        </fileset>
+     </move>
+
+     <copy file="${basedir}/../common-dist/tomcat/tomcat-users.xml"
+           todir="${TOMCAT6}/conf" />
+     <copy file="${basedir}/../common-dist/tomcat/log4j.xml"
+           todir="${TOMCAT6}/lib" />
+     <chmod dir="${basedir}/target/apache-tomcat-6.0.26/bin" perm="700" includes="**/*.sh"/>
+     <chmod dir="${basedir}/target/apache-tomcat-6.0.26/bin" perm="700" includes="**/*.jar"/>
+  </target>
+
+  <target name="copy-picketlink-jboss">
+    <mkdir dir="${deploy}/picketlink" />
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings/${version}/picketlink-bindings-${version}.jar" todir="${deploy}/picketlink"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings-jboss/${version}/picketlink-bindings-jboss-${version}.jar" todir="${deploy}/picketlink"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${deploy}/picketlink"/>
+    <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
+           dest="${deploy}"/>
+    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${deploy}/picketlink"/>
+
+    <chmod file="${jbossas}/bin/run.sh" perm="700"/>
+
+  </target>
+
+
+  <target name="copy-picketlink-jbas5" depends="init-jboss5" >
+    <antcall target="copy-picketlink-jboss">
+        <param name="deploy" value="${JBAS5_DEPLOY}"/>
+        <param name="jbossas" value="${basedir}/target/jboss-5.1.0.GA"/>
+    </antcall>
+    
+    <!--
+    <mkdir dir="${JBAS5_DEPLOY}/picketlink" />
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings/${version}/picketlink-bindings-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-bindings-jboss/${version}/picketlink-bindings-jboss-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
+    <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
+    <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
+           dest="${JBAS5_DEPLOY}"/>
+    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
+
+    <chmod file="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" perm="700"/>
+    -->
+  </target>
+
+  <target name="copy-picketlink-jbas6" depends="init-jboss6" >
+    <antcall target="copy-picketlink-jboss">
+        <param name="deploy" value="${JBAS6_DEPLOY}"/>
+        <param name="jbossas" value="${basedir}/target/jboss-6.0.0.Final"/>
+    </antcall>
+  </target>
+    
+  <target name="start-jboss">
+    <echo>Starting Local 8080 </echo>
+      <exec executable="${jbossas}/bin/run.sh" 
+            osfamily="unix" spawn="true" />
+         <waitfor maxwait="1" maxwaitunit="minute"
+              checkevery="100" checkeveryunit="millisecond">
+             <http url="http://localhost:8080" />
+     </waitfor>
+     <echo>:Local 8080 Started</echo> 
+  </target>
+
+  <target name="start-jboss5" depends="copy-picketlink-jbas5" >
+    <antcall target="start-jboss">
+        <param name="jbossas" value="${basedir}/target/jboss-5.1.0.GA"/>
+    </antcall>
+    <!--
+    <echo>Starting Local 8080 </echo>
+      <exec executable="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" 
+            osfamily="unix" spawn="true" />
+         <waitfor maxwait="1" maxwaitunit="minute"
+              checkevery="100" checkeveryunit="millisecond">
+             <http url="http://localhost:8080" />
+     </waitfor>
+     <echo>:Local 8080 Started</echo> 
+     -->
+  </target>
+
+  <target name="start-jboss6" depends="copy-picketlink-jbas6" >
+    <antcall target="start-jboss">
+        <param name="jbossas" value="${basedir}/target/jboss-6.0.0.Final"/>
+    </antcall>
+  </target>
+
+  <target name="start-tomcat6" depends="copy-picketlink-tomcat6" >
+    <echo>Starting Local 8080 </echo>
+      <exec executable="${TOMCAT6_DEPLOY}/../bin/startup.sh" 
+            osfamily="unix" spawn="true" />
+         <waitfor maxwait="25" maxwaitunit="second"
+              checkevery="100" checkeveryunit="millisecond">
+             <http url="http://localhost:8080" />
+     </waitfor>
+     <echo>:Local 8080 Started</echo> 
+  </target>
+
+  <target name="stop-jboss">
+    <echo>Stopping Local 8080 </echo>
+    <echo>Going to Kill the JBoss Process</echo>
+    <exec executable="${basedir}/../common-dist/scripts/stopjboss.sh" 
+          osfamily="unix" />
+  </target>
+
+  <target name="stop-jboss5">
+    <antcall target="stop-jboss"/>
+  </target>
+
+  <target name="stop-jboss6">
+    <antcall target="stop-jboss"/>
+  </target>
+
+  <target name="stop-tomcat6">
+    <echo>Stopping Local 8080 </echo>
+    <echo>Going to stop tomcat</echo>
+    <exec executable="${TOMCAT6_DEPLOY}/../bin/shutdown.sh" 
+          osfamily="unix" />
+  </target>
+</project>

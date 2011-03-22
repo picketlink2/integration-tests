@@ -16,7 +16,11 @@
    <modules>
      <module>parent</module>
      <module>picketlink-saml-tests</module>
+     <module>picketlink-saml-jbas51</module>
+     <module>picketlink-saml-jbas6</module>
+     <module>picketlink-saml-tomcat6</module>
      <module>picketlink-sts-tests</module>
      <module>picketlink-openid-tests</module>
+     <module>picketlink-pdp-tests</module>
    </modules>
 </project>
