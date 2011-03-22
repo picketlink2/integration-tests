@@ -8,7 +8,7 @@
    <modelVersion>4.0.0</modelVersion>
    <artifactId>picketlink-integration-saml-tests</artifactId>
    <packaging>jar</packaging>
-   <name>PicketLink Integration Tests for SAML</name>
+   <name>PicketLink Integration Tests for SAML - Tests</name>
    <url>http://labs.jboss.org/portal/picketlink/</url>
    <description>PicketLink Federation Tests to be run in a continous integration environment such as Hudson</description>
    <licenses>

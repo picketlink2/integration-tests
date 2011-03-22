@@ -20,6 +20,8 @@
      <module>picketlink-saml-jbas6</module>
      <module>picketlink-saml-tomcat6</module>
      <module>picketlink-sts-tests</module>
+     <module>picketlink-sts-jbas51-native</module>
+     <module>picketlink-sts-jbas51-cxf</module>
      <module>picketlink-openid-tests</module>
      <module>picketlink-pdp-tests</module>
    </modules>

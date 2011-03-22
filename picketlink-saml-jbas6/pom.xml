@@ -8,7 +8,7 @@
    <modelVersion>4.0.0</modelVersion>
    <artifactId>picketlink-integration-saml-tests-JBAS6</artifactId>
    <packaging>jar</packaging>
-   <name>PicketLink Integration Tests for SAML</name>
+   <name>PicketLink Integration Tests for SAML - JBoss AS 6</name>
    <url>http://labs.jboss.org/portal/picketlink/</url>
    <description>PicketLink Federation Tests to be run in a continous integration environment such as Hudson</description>
    <licenses>
@@ -59,6 +59,7 @@
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
                  <property name="version" value="${project.version}"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="init-jboss6" />
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="start-jboss6" />
                 </tasks>
              </configuration>

@@ -7,6 +7,8 @@
    <property name="TOMCAT6" location="${basedir}/target/apache-tomcat-6.0.26/" />
    <property name="TOMCAT6_DEPLOY" location="${basedir}/target/apache-tomcat-6.0.26/webapps/" />
    <property name="TOMCAT6_LIB" location="${basedir}/target/apache-tomcat-6.0.26/lib/" />
+   <property name="JBWS_CXF_ZIP" location="${basedir}/../common-dist/jbossws/3.3.1.GA/jbossws-cxf-3.3.1.GA.zip"/>
+   <property name="JBWS_CXF_HOME" location="${basedir}/target/jbossws-cxf-bin-dist/"/>
    <property environment="env" />
 
   <target name="init-jboss5">
@@ -28,7 +30,6 @@
     <unzip src="${basedir}/../common-dist/tomcat/6.0.26/apache-tomcat-6.0.26.zip"
            dest="${basedir}/target"/>
   </target>
-
 
   <target name="tomcat6-thirdparty-deps" depends="init-tomcat6" >
     <copy file="${localRepository}/apache-log4j/log4j/1.2.14/log4j-1.2.14.jar" todir="${TOMCAT6_LIB}"/>
@@ -71,7 +72,7 @@
   </target>
 
 
-  <target name="copy-picketlink-jbas5" depends="init-jboss5" >
+  <target name="copy-picketlink-jbas5">
     <antcall target="copy-picketlink-jboss">
         <param name="deploy" value="${JBAS5_DEPLOY}"/>
         <param name="jbossas" value="${basedir}/target/jboss-5.1.0.GA"/>
@@ -90,11 +91,19 @@
     -->
   </target>
 
-  <target name="copy-picketlink-jbas6" depends="init-jboss6" >
+  <target name="copy-picketlink-jbas6">
     <antcall target="copy-picketlink-jboss">
         <param name="deploy" value="${JBAS6_DEPLOY}"/>
         <param name="jbossas" value="${basedir}/target/jboss-6.0.0.Final"/>
     </antcall>
+  </target>
+    
+  <target name="copy-sts-props-jbas5">
+   <copy file="${basedir}/../picketlink-sts-tests/src/test/resources/sts-config.properties" todir="${JBAS5_DEPLOY}/../conf/"/>
+  </target>
+    
+  <target name="copy-sts-props-jbas6">
+   <copy file="${basedir}/../picketlink-sts-tests/src/test/resources/sts-config.properties" todir="${JBAS6_DEPLOY}/../conf/"/>
   </target>
     
   <target name="start-jboss">
@@ -162,4 +171,15 @@
     <exec executable="${TOMCAT6_DEPLOY}/../bin/shutdown.sh" 
           osfamily="unix" />
   </target>
+
+ <target name="install-jbws-cxf-jbas5">
+     <echo>Installing JBoss WS CXF Stack</echo>
+     <!-- Unzip JBoss WS CXF -->
+     <unzip src="${JBWS_CXF_ZIP}" dest="${basedir}/target"/>
+     <!-- Copy the ant.properties file that will be used by JBoss WS installation -->
+     <copy file="${basedir}/../common-dist/jbossws/ant.properties" todir="${JBWS_CXF_HOME}"/>
+     <!-- Invoke the installation ant target -->
+     <ant dir="${JBWS_CXF_HOME}" target="deploy-jboss510" />
+  </target>
+
 </project>
