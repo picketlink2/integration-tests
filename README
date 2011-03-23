@@ -1,0 +1,19 @@
+**********************************
+*  PicketLink Integration Tests  *
+**********************************
+
+WORKSPACE LAYOUT
+===============
+We have STS tests in the picketlink-sts-tests module
+We have SAML tests in the picketlink-saml-tests module
+The above modules dont run tests. But just compile the test classes.
+
+There are numerous  picketlink-saml-* and picketlink-sts-* modules that test a various combination
+of JBoss AS 5.1, JBoss AS 6.0, Apache Tomcat 6.0 etc
+These modules run the surefire plugin against the test classes directory  from picketlink-*-tests modules.
+
+
+TROUBLESHOOTING
+==============
+1. My tests are not detected in the modules. All I see are JBAS started and stopped.  No tests are run.
+Solution: Try to run the picketlink-saml-tests and/or picketlink-sts-tests first.
