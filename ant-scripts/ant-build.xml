@@ -182,4 +182,14 @@
      <ant dir="${JBWS_CXF_HOME}" target="deploy-jboss510" />
   </target>
 
+ <target name="install-jbws-cxf-jbas6">
+     <echo>Installing JBoss WS CXF Stack</echo>
+     <!-- Unzip JBoss WS CXF -->
+     <unzip src="${JBWS_CXF_ZIP}" dest="${basedir}/target"/>
+     <!-- Copy the ant.properties file that will be used by JBoss WS installation -->
+     <copy file="${basedir}/../common-dist/jbossws/ant.properties.jbas6" tofile="${JBWS_CXF_HOME}/ant.properties"/>
+     <!-- Invoke the installation ant target -->
+     <ant dir="${JBWS_CXF_HOME}" target="deploy-jboss600" />
+  </target>
+
 </project>
