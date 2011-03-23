@@ -43,6 +43,7 @@
              <configuration>
                <printSummary>true</printSummary>
                <disableXmlReport>false</disableXmlReport>
+               <testFailureIgnore>true</testFailureIgnore>
                <includes>
                  <include>**/**TestCase.java</include>
                </includes>
