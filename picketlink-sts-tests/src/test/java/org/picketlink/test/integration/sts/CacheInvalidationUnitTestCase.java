@@ -21,10 +21,10 @@ import java.net.URI;
 import java.util.List;
 import java.util.Properties;
 
+import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
 import javax.naming.InitialContext;
 
-import org.jboss.jmx.adaptor.rmi.RMIAdaptor;
 import org.jboss.security.SimplePrincipal;
 import org.junit.Assert;
 import org.junit.Test;
@@ -68,10 +68,13 @@ public class CacheInvalidationUnitTestCase
       props.put("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
       props.put("java.naming.factory.url.pkgs", "org.jboss.naming:org.jnp.interfaces");
       props.put("java.naming.provider.url", "localhost:1099");
-
+      
+      MBeanServerConnection server = null;
       // lookup the RMIAdaptor instance in JNDI.
       InitialContext ic = new InitialContext(props);
-      RMIAdaptor server = (RMIAdaptor) ic.lookup("jmx/invoker/RMIAdaptor");
+      Object obj = ic.lookup("jmx/invoker/RMIAdaptor");
+      server = (MBeanServerConnection) obj; 
+       
       Assert.assertNotNull("RMIAdaptor is null, lookup failed", server);
       
       // invoke the token service to obtain a short-lived (10s) assertion.
@@ -106,7 +109,6 @@ public class CacheInvalidationUnitTestCase
       result = server.invoke(name, "getAuthenticationCachePrincipals", methodParams, methodSignature);
       Assert.assertTrue("getAuthenticationCachePrincipals returned an invalid result object", result instanceof List<?>);
       resultList = (List<?>) result;
-      Assert.assertEquals("Unexpected cache size", 0, resultList.size());
-
+      Assert.assertEquals("Unexpected cache size", 0, resultList.size()); 
    }
 }
