@@ -6,9 +6,9 @@
       <relativePath>../parent</relativePath>
    </parent>
    <modelVersion>4.0.0</modelVersion>
-   <artifactId>picketlink-integration-sts-jbas6-native</artifactId>
+   <artifactId>picketlink-integration-sts-jbas6-cxf</artifactId>
    <packaging>jar</packaging>
-   <name>PicketLink Integration Tests for WS-Trust (STS) - JBoss AS 6 - Native Stack</name>
+   <name>PicketLink Integration Tests for WS-Trust (STS) - JBoss AS 6 - CXF Stack</name>
    <url>http://labs.jboss.org/portal/picketlink/</url>
    <description>PicketLink Federation Tests to be run in a continous integration environment such as Hudson</description>
    <licenses>
