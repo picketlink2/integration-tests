@@ -43,22 +43,6 @@
            <reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
            </configuration>
         </plugin>
-<!--
-       <plugin>
-         <artifactId>maven-surefire-plugin</artifactId>
-         <configuration>
-           <phase>test</phase>
-           <testClassesDirectory>${baseDir}/../picketlink-sts-tests/target/test-classes</testClassesDirectory>
-           <testResourcesDirectory>${baseDir}/../picketlink-sts-tests/src/test/resources</testResourcesDirectory>
-           <includes>
-             <include>**/**TestCase.java</include>
-           </includes>
-           <forkMode>pertest</forkMode>
-           <trimStackTrace>false</trimStackTrace>
-           <reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
-         </configuration>
-        </plugin>
--->
         <plugin>
           <artifactId>maven-antrun-plugin</artifactId>
           <executions>
@@ -71,6 +55,7 @@
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="init-jboss6" />
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="install-jbws-cxf-jbas6" />
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="copy-sts-props-jbas6" />
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="start-jboss6" />
                 </tasks>
@@ -113,7 +98,7 @@
          <groupId>org.jboss.jbossas</groupId>
          <artifactId>jboss-as-server</artifactId>
          <classifier>jmx-invoker-adaptor-client</classifier>
-         <version>5.1.0.GA</version>
+         <version>6.0.0.Final</version>
          <scope>test</scope>
          <exclusions>
            <exclusion>
@@ -125,13 +110,6 @@
              <artifactId>dtdparser121</artifactId>
            </exclusion>
          </exclusions>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.jbossas</groupId>
-         <artifactId>jboss-as-server</artifactId>
-         <classifier>client</classifier>
-         <version>5.1.0.GA</version>
-         <scope>test</scope>
       </dependency>
       <dependency>
          <groupId>junit</groupId>
