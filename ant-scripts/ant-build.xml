@@ -106,7 +106,7 @@
    <copy file="${basedir}/../picketlink-sts-tests/src/test/resources/sts-config.properties" todir="${JBAS6_DEPLOY}/../conf/"/>
   </target>
     
-  <target name="start-jboss">
+  <target name="start-jboss" depends="stop-jboss">
     <echo>Starting Local 8080 </echo>
       <exec executable="${jbossas}/bin/run.sh" 
             osfamily="unix" spawn="true" />
@@ -139,7 +139,7 @@
     </antcall>
   </target>
 
-  <target name="start-tomcat6" depends="copy-picketlink-tomcat6" >
+  <target name="start-tomcat6" depends="copy-picketlink-tomcat6,stop-tomcat6" >
     <echo>Starting Local 8080 </echo>
       <exec executable="${TOMCAT6_DEPLOY}/../bin/startup.sh" 
             osfamily="unix" spawn="true" />
