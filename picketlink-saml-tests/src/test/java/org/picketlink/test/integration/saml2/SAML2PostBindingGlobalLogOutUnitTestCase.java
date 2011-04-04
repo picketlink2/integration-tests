@@ -46,16 +46,17 @@ import com.meterware.httpunit.WebResponse;
  * @since Apr 8, 2010
  */
 public class SAML2PostBindingGlobalLogOutUnitTestCase
-{
+{ 
+    String SERVICE_1_URL = System.getProperty( "SERVICE_1_URL", "http://localhost:8080/sales-post/" );
+    String SERVICE_2_URL = System.getProperty( "SERVICE_2_URL", "http://localhost:8080/employee-post/" );
+    String LOGOUT_URL = "?GLO=true";
+    
    @Test
    public void testSAMLPostBindingGlobalLogOut() throws Exception
    {
-      String SERVICE_1_URL = System.getProperty( "SERVICE_1_URL", "http://localhost:8080/sales-post/" );
-      String SERVICE_2_URL = System.getProperty( "SERVICE_2_URL", "http://localhost:8080/employee-post/" );
-      String LOGOUT_URL = "?GLO=true";
       
       //Sales Application Login
-      WebRequest serviceRequest1 = new GetMethodWebRequest( SERVICE_1_URL );
+      WebRequest serviceRequest1 = new GetMethodWebRequest( getService1URL() );
       WebConversation webConversation = new WebConversation();
       
       WebResponse webResponse = webConversation.getResponse( serviceRequest1 ); 
@@ -69,19 +70,28 @@ public class SAML2PostBindingGlobalLogOutUnitTestCase
       assertTrue( " Reached the sales index page ", webResponse.getText().contains( "SalesTool" ));
       
       //Employee Application Login
-      webResponse = webConversation.getResponse( SERVICE_2_URL );
+      webResponse = webConversation.getResponse( getService2URL() );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "EmployeeDashboard" ));
       
       //Logout from sales
-      webResponse = webConversation.getResponse( SERVICE_1_URL + LOGOUT_URL ); 
+      webResponse = webConversation.getResponse( getService1URL() + LOGOUT_URL ); 
       assertTrue( "Reached logged out page", webResponse.getText().contains( "logged" ) );
       
       //Hit the Sales App again
-      webResponse = webConversation.getResponse( SERVICE_1_URL );
+      webResponse = webConversation.getResponse( getService1URL() );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
  
       //Hit the Employee App again
-      webResponse = webConversation.getResponse( SERVICE_2_URL );
+      webResponse = webConversation.getResponse( getService2URL() );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));     
+   }
+   
+   public String getService1URL()
+   {
+      return SERVICE_1_URL;
+   }
+   public String getService2URL()
+   {
+      return SERVICE_2_URL;
    }
 }
