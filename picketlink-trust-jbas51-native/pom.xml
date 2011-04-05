@@ -1,0 +1,211 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <parent>
+      <groupId>org.picketlink</groupId>
+      <artifactId>picketlink-integration-tests-parent</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+      <relativePath>../parent</relativePath>
+   </parent>
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>picketlink-integration-trust-jbas51-native</artifactId>
+   <packaging>jar</packaging>
+   <name>PicketLink Integration Tests for WS-Trust (STS) - Trust - JBoss AS 5.1 - Native Stack</name>
+   <url>http://labs.jboss.org/portal/picketlink/</url>
+   <description>PicketLink Federation Tests to be run in a continous integration environment such as Hudson</description>
+   <licenses>
+      <license>
+         <name>lgpl</name>
+         <url>http://repository.jboss.com/licenses/lgpl.txt</url>
+      </license>
+   </licenses>
+   <organization>
+      <name>JBoss Inc.</name>
+      <url>http://www.jboss.org</url>
+   </organization>
+   <build>
+     <plugins>
+       <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.5</version>
+          <configuration>
+            <phase>test</phase>
+           <!--  <skipTests>true</skipTests> -->
+            <testClassesDirectory>${basedir}/../picketlink-trust-tests/target/test-classes</testClassesDirectory>
+            <testResourcesDirectory>${basedir}/../picketlink-trust-tests/target/test-classes</testResourcesDirectory>
+            <printSummary>true</printSummary>
+            <disableXmlReport>false</disableXmlReport>
+            <includes>
+              <include>**/**TestCase.java</include>
+            </includes>
+            <forkMode>pertest</forkMode>
+            <argLine>-Djava.endorsed.dirs=${basedir}/target/jboss-5.1.0.GA/lib/endorsed</argLine>
+            <useFile>false</useFile>
+            <trimStackTrace>false</trimStackTrace>
+            <reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
+            <additionalClasspathElements>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/jbossall-client.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/jbossws-native-core.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/jbossws-native-client.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/jbossws-spi.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/jbossws-native-jaxrpc.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/jbossws-common.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/jboss-xml-binding.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/mail.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/wsdl4j.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/wstx.jar</additionalClasspathElement>
+              <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/policy.jar</additionalClasspathElement>
+            </additionalClasspathElements>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>phase-1</id>
+              <phase>compile</phase>
+              <configuration>
+                <tasks>
+                 <property name="version" value="${project.version}"/>
+                 <property name="depclasspath" refid="maven.dependency.classpath"/>
+                 <property name="localRepository" value="${user.home}/.m2/repository"/>
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="init-jboss5" />
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="copy-sts-props-jbas5" />
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="copy-trust-settings-jbas5" />
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="start-jboss5" />
+                </tasks>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>phase-2</id>
+              <phase>test</phase>
+              <configuration>
+                <tasks>
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="stop-jboss5" />
+                </tasks>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+       </plugin>
+     </plugins>
+  </build>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.picketlink</groupId>
+         <artifactId>picketlink-fed</artifactId>
+         <version>${version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.picketlink</groupId>
+         <artifactId>picketlink-trust-jbossws</artifactId>
+         <version>${version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.security</groupId>
+         <artifactId>jbosssx-client</artifactId>
+         <version>2.0.4.SP6</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.jbossas</groupId>
+         <artifactId>jboss-as-server</artifactId>
+         <classifier>jmx-invoker-adaptor-client</classifier>
+         <version>5.1.0.GA</version>
+         <scope>test</scope>
+         <exclusions>
+           <exclusion>
+             <groupId>trove</groupId>
+             <artifactId>trove</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>wutka-dtdparser</groupId>
+             <artifactId>dtdparser121</artifactId>
+           </exclusion>
+         </exclusions>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.jbossas</groupId>
+         <artifactId>jboss-as-server</artifactId>
+         <classifier>client</classifier>
+         <version>5.1.0.GA</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>httpunit</groupId>
+        <artifactId>httpunit</artifactId>
+        <version>1.7</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>rhino</groupId>
+        <artifactId>js</artifactId>
+        <version>1.6R7</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>apache-log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.14</version>
+      </dependency>
+      <dependency>
+        <groupId>nekohtml</groupId>
+        <artifactId>nekohtml</artifactId>
+        <version>1.9.12</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>apache-xerces</groupId>
+        <artifactId>xercesImpl</artifactId>
+        <version>2.9.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>ant-contrib</groupId>
+        <artifactId>ant-contrib</artifactId>
+        <version>1.0b2</version>
+      </dependency>
+
+   </dependencies>
+   
+   <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <doclet>org.jboss.apiviz.APIviz</doclet>
+          <docletArtifact>
+            <groupId>org.jboss.apiviz</groupId>
+            <artifactId>apiviz</artifactId>
+            <version>1.2.5.GA</version>
+          </docletArtifact>
+          <additionalparam>
+            -charset UTF-8
+            -docencoding UTF-8
+            -version
+            -author
+            -breakiterator
+            -windowtitle "${project.name} ${project.version} API Reference"
+            -doctitle "${project.name} ${project.version} API Reference"
+            -bottom "Copyright © ${project.inceptionYear}-Present ${project.organization.name}. All Rights Reserved."
+            -link http://java.sun.com/javase/6/docs/api/
+            -sourceclasspath ${project.build.outputDirectory}
+          </additionalparam>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- ejb3 test application-policy definition -->
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="sts">
+      <authentication>
+         <login-module code="org.picketlink.identity.federation.bindings.jboss.auth.SAML2STSLoginModule" flag="required">
+            <module-option name="configFile">sts-config.properties</module-option>
+            <module-option name="password-stacking">useFirstPass</module-option>
+         </login-module>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required">
+            <module-option name="usersProperties">sts-users.properties</module-option>
+            <module-option name="rolesProperties">sts-roles.properties</module-option>
+            <module-option name="password-stacking">useFirstPass</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   
+   <!-- ejb3 test application-policy definition -->
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="jmx-console">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required">
+            <module-option name="usersProperties">sts-users.properties</module-option>
+            <module-option name="rolesProperties">sts-roles.properties</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+</deployment>
