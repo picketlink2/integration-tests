@@ -105,6 +105,14 @@
   <target name="copy-sts-props-jbas6">
    <copy file="${basedir}/../picketlink-sts-tests/src/test/resources/sts-config.properties" todir="${JBAS6_DEPLOY}/../conf/"/>
   </target>
+
+  <target name="copy-trust-settings-jbas5">
+   <copy file="${basedir}/../picketlink-trust-tests/src/test/resources/domains/sts-jboss-beans.xml" todir="${JBAS5_DEPLOY}/picketlink" />
+   <copy file="${basedir}/../picketlink-trust-tests/target/picketlink-wstest-tests.jar" todir="${JBAS5_DEPLOY}/picketlink" />
+   <copy file="${basedir}/../picketlink-trust-tests/src/test/resources/props/sts-users.properties" todir="${JBAS5_DEPLOY}/../conf" />
+   <copy file="${basedir}/../picketlink-trust-tests/src/test/resources/props/sts-roles.properties" todir="${JBAS5_DEPLOY}/../conf" />
+    <copy file="${localRepository}/org/picketlink/picketlink-trust-jbossws/${version}/picketlink-trust-jbossws-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
+  </target>
     
   <target name="start-jboss" depends="stop-jboss">
     <echo>Starting Local 8080 </echo>
