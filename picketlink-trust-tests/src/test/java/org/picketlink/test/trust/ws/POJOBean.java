@@ -21,28 +21,29 @@
  */
 package org.picketlink.test.trust.ws;
 
-import javax.annotation.Resource;
-import javax.ejb.Stateless;
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.xml.ws.WebServiceContext;
+import javax.jws.soap.SOAPBinding;
 
 /**
- * Just a Simple EJB3 bean exposed as WS
+ * POJO that is exposed as WS
  * @author Anil.Saldhana@redhat.com
- * @since Apr 5, 2011
+ * @since Apr 11, 2011
  */
-@Stateless
 @WebService
-@HandlerChain(file="test-binary-handlers.xml")
-public class TestBean implements WSTest
-{ 
-   @Resource
-   WebServiceContext wsCtx;
-
+@SOAPBinding(style = SOAPBinding.Style.RPC)
+@HandlerChain(file="authorize-handlers.xml") 
+public class POJOBean
+{
    @WebMethod
    public void echo(String echo)
+   {
+      System.out.println(echo);
+   }
+
+   @WebMethod
+   public void echoUnchecked(String echo)
    {
       System.out.println(echo);
    }

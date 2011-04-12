@@ -26,6 +26,36 @@
      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>war</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+            <warName>pojo-test</warName>
+            <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+            <warSourceDirectory>src/test/resources/webapp</warSourceDirectory>
+            <webResources>
+              <resource>
+                <!-- this is relative to the pom.xml directory -->
+                <directory>target/test-classes</directory>
+                <targetPath>WEB-INF/classes</targetPath> 
+                <includes>
+                  <include>**/POJOBean*</include>
+                  <include>**/auth*</include>
+                 </includes>
+              </resource>
+            </webResources>
+         </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId> 
         <executions>
           <execution>
@@ -38,12 +68,14 @@
         <configuration>
           <finalName>picketlink-wstest</finalName>
           <excludes>
+            <exclude>**/WEB-INF/**</exclude>
             <exclude>**/*jboss-beans.xml</exclude>
             <exclude>**/*TestCase*</exclude>
+            <exclude>**/POJO*</exclude>
+            <exclude>**/author*</exclude>
           </excludes>
         </configuration>
-      </plugin>
-      
+      </plugin>  
 
       <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -94,7 +126,7 @@
       <dependency>
          <groupId>org.jboss.ws.native</groupId>
          <artifactId>jbossws-native-core</artifactId>
-         <version>3.4.1.GA</version>
+         <version>3.1.2.GA</version>
          <scope>test</scope>
          <exclusions>
            <exclusion>

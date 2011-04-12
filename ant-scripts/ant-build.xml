@@ -77,6 +77,7 @@
         <param name="deploy" value="${JBAS5_DEPLOY}"/>
         <param name="jbossas" value="${basedir}/target/jboss-5.1.0.GA"/>
     </antcall>
+    <copy file="${basedir}/../common-dist/files/jboss-log4j.xml" todir="${JBAS5_DEPLOY}/../conf"/>
     
     <!--
     <mkdir dir="${JBAS5_DEPLOY}/picketlink" />
@@ -109,6 +110,7 @@
   <target name="copy-trust-settings-jbas5">
    <copy file="${basedir}/../picketlink-trust-tests/src/test/resources/domains/sts-jboss-beans.xml" todir="${JBAS5_DEPLOY}/picketlink" />
    <copy file="${basedir}/../picketlink-trust-tests/target/picketlink-wstest-tests.jar" todir="${JBAS5_DEPLOY}/picketlink" />
+   <copy file="${basedir}/../picketlink-trust-tests/target/pojo-test.war" todir="${JBAS5_DEPLOY}/picketlink" />
    <copy file="${basedir}/../picketlink-trust-tests/src/test/resources/props/sts-users.properties" todir="${JBAS5_DEPLOY}/../conf" />
    <copy file="${basedir}/../picketlink-trust-tests/src/test/resources/props/sts-roles.properties" todir="${JBAS5_DEPLOY}/../conf" />
     <copy file="${localRepository}/org/picketlink/picketlink-trust-jbossws/${version}/picketlink-trust-jbossws-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
