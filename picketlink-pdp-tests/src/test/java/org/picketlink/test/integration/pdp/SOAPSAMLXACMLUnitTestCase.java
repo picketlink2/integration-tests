@@ -26,6 +26,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.jboss.security.xacml.core.model.context.ActionType;
 import org.jboss.security.xacml.core.model.context.AttributeType;
 import org.jboss.security.xacml.core.model.context.AttributeValueType;
@@ -53,12 +57,28 @@ public class SOAPSAMLXACMLUnitTestCase
    private String issuer = "testIssuer";
 
    @Test
-   public void testXACML() throws Exception
+   public void testPermit() throws Exception
    {
       if(sendRequest)
       {
          //Create an XACML Request
-         RequestType xacmlRequest = getXACMLRequest();
+         RequestType xacmlRequest = getXACMLRequest(true);
+         SOAPSAMLXACML soapSAMLXACML = new SOAPSAMLXACML();
+         
+         Result result = soapSAMLXACML.send(endpoint, issuer, xacmlRequest);
+         assertTrue("No fault", result.isFault() == false);
+         assertTrue("Decision available", result.isResponseAvailable());
+         assertTrue("Permit", result.isPermit());
+      }
+   }
+   
+   @Test
+   public void testDeny() throws Exception
+   {
+      if(sendRequest)
+      {
+         //Create an XACML Request
+         RequestType xacmlRequest = getXACMLRequest(false);
          SOAPSAMLXACML soapSAMLXACML = new SOAPSAMLXACML();
          
          Result result = soapSAMLXACML.send(endpoint, issuer, xacmlRequest);
@@ -66,16 +86,17 @@ public class SOAPSAMLXACMLUnitTestCase
          assertTrue("Decision available", result.isResponseAvailable());
          assertTrue("Deny", result.isDeny());
       }
+      
    }
    
    
-   private RequestType getXACMLRequest()
+   private RequestType getXACMLRequest( boolean permit)
    {
       RequestType requestType = new RequestType();
       requestType.getSubject().add(createSubject());
-      requestType.getResource().add(createResource());
+      requestType.getResource().add(createResource(permit));
       requestType.setAction(createAction());
-      requestType.setEnvironment(createEnvironment());
+      requestType.setEnvironment(createEnvironment(permit));
       return requestType;
    }
    
@@ -90,8 +111,8 @@ public class SOAPSAMLXACMLUnitTestCase
       return subject;
    }
 
-   public ResourceType createResource()
-   {
+   public ResourceType createResource(boolean permit)
+   {  
       ResourceType resourceType = new ResourceType();
 
       AttributeType attResourceID = RequestAttributeFactory.createStringAttributeType(
@@ -123,8 +144,24 @@ public class SOAPSAMLXACMLUnitTestCase
       //Add the attributes into the resource
       resourceType.getAttribute().add(attResourceID);
       resourceType.getAttribute().add(multi);
+      
+      if(!permit)
       resourceType.getAttribute().add(attConfidentialityCode);
-      resourceType.getAttribute().add(attDissentedSubjectId); 
+      
+      resourceType.getAttribute().add(attDissentedSubjectId);
+      
+      if(permit)
+      {    
+         AttributeType start = RequestAttributeFactory.createTimeAttributeType(
+               "urn:oasis:names:tc:xspa:1.0:resource:org:hoursofoperation:start",
+               issuer, getXMLTime("00:00:00-08:00"));
+         AttributeType end = RequestAttributeFactory.createTimeAttributeType(
+               "urn:oasis:names:tc:xspa:1.0:resource:org:hoursofoperation:end",
+               issuer, getXMLTime("23:59:00-08:00"));
+         resourceType.getAttribute().add(start);
+         resourceType.getAttribute().add(end);
+      }
+       
       return resourceType;
    }
 
@@ -168,6 +205,7 @@ public class SOAPSAMLXACMLUnitTestCase
       multi.getAttributeValue().add(createAttributeValueType("urn:va:xacml:2.0:interop:rsa8:hl7:prd-009"));
       multi.getAttributeValue().add(createAttributeValueType("urn:va:xacml:2.0:interop:rsa8:hl7:prd-006"));
       
+      
       //Locality
       AttributeType attLocality = RequestAttributeFactory.createStringAttributeType(
             "urn:oasis:names:tc:xacml:1.0:subject:locality", issuer, "Facility A"); 
@@ -175,12 +213,13 @@ public class SOAPSAMLXACMLUnitTestCase
       attrList.add(attSubjectID);
       attrList.add(attRole);
       attrList.add(multi); 
+       
       attrList.add(attLocality);
       
       return attrList;
    }
    
-   private EnvironmentType createEnvironment()
+   private EnvironmentType createEnvironment(boolean permit)
    {
       EnvironmentType env = new EnvironmentType();
       
@@ -188,6 +227,15 @@ public class SOAPSAMLXACMLUnitTestCase
             "urn:va:xacml:2.0:interop:rsa8:environment:locality", issuer, "Facility A"); 
       
       env.getAttribute().add(attFacility);
+      
+      if(permit)
+      {
+
+         AttributeType currentTime = RequestAttributeFactory.createTimeAttributeType(
+               "urn:oasis:names:tc:xacml:1.0:environment:current-time",
+               issuer, getXMLTime("12:59:00-08:00"));
+         env.getAttribute().add(currentTime);
+      }
       return env;
    }
    
@@ -196,5 +244,19 @@ public class SOAPSAMLXACMLUnitTestCase
       AttributeValueType avt = new AttributeValueType();
       avt.getContent().add(value);
       return avt;
+   }
+   
+   private XMLGregorianCalendar getXMLTime( String time)
+   {
+      DatatypeFactory dtf;
+      try
+      {
+         dtf = DatatypeFactory.newInstance();
+      }
+      catch (DatatypeConfigurationException e)
+      {
+         throw new RuntimeException(e);
+      }
+      return  dtf.newXMLGregorianCalendar(time);
    }
 }
