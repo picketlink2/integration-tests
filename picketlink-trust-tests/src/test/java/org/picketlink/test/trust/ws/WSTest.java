@@ -33,5 +33,7 @@ import javax.jws.WebService;
  */
 public interface WSTest
 {
-   public void echo(String echo);
+   public String echo(String echo);
+
+   public String echoUnchecked(String echo); 
 }

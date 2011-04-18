@@ -37,14 +37,14 @@ import javax.jws.soap.SOAPBinding;
 public class POJOBean
 {
    @WebMethod
-   public void echo(String echo)
+   public String echo(String echo)
    {
-      System.out.println(echo);
+      return echo;
    }
 
    @WebMethod
-   public void echoUnchecked(String echo)
+   public String echoUnchecked(String echo)
    {
-      System.out.println(echo);
+      return echo;
    }
 }

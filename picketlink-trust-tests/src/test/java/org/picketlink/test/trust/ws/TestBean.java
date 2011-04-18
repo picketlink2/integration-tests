@@ -42,8 +42,15 @@ public class TestBean implements WSTest
    WebServiceContext wsCtx;
 
    @WebMethod
-   public void echo(String echo)
+   public String echo(String echo)
+   { 
+      return echo;
+   }
+
+
+   @WebMethod
+   public String echoUnchecked(String echo)
    {
-      System.out.println(echo);
+      return echo;
    }
 }
