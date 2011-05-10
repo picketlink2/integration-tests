@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <deployment xmlns="urn:jboss:bean-deployer:2.0">
-
-   <!-- ejb3 test application-policy definition -->
    <application-policy xmlns="urn:jboss:security-beans:1.0" name="sts">
       <authentication>
          <login-module code="org.picketlink.identity.federation.bindings.jboss.auth.SAML2STSLoginModule" flag="required">
             <module-option name="configFile">sts-config.properties</module-option>
             <module-option name="password-stacking">useFirstPass</module-option>
          </login-module>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required">
+            <module-option name="usersProperties">sts-users.properties</module-option>
+            <module-option name="rolesProperties">sts-roles.properties</module-option>
+            <module-option name="password-stacking">useFirstPass</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   
+   
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="binary">
+      <authentication>
+         <login-module code="org.picketlink.trust.jbossws.jaas.JBWSTokenIssuingLoginModule" flag="required">
+            <module-option name="endpointAddress">http://localhost:8080/picketlink-sts/PicketLinkSTS</module-option>
+            <module-option name="serviceName">PicketLinkSTS</module-option>
+            <module-option name="portName">PicketLinkSTSPort</module-option>
+            <module-option name="inject.callerprincipal">true</module-option>
+            <module-option name="handlerChain">binary</module-option>
+            <module-option name="username">admin</module-option>
+            <module-option name="password">MASK-0BbleBL2LZk=</module-option>
+            <module-option name="salt">18273645</module-option>
+            <module-option name="iterationCount">56</module-option>
+            <module-option name="useOptionsCredentials">true</module-option>
+            <module-option name="overrideDispatch">true</module-option>
+            <module-option name="wspAppliesTo">http://services.testcorp.org/provider1</module-option>
+            <module-option name="password-stacking">useFirstPass</module-option>
+         </login-module>
+         
          <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required">
             <module-option name="usersProperties">sts-users.properties</module-option>
             <module-option name="rolesProperties">sts-roles.properties</module-option>
@@ -26,5 +51,14 @@
          </login-module>
       </authentication>
    </application-policy>
+   
+   
+   <bean name="PicketLinkTestSystemProperties"
+        class="org.jboss.varia.property.SystemPropertiesService"> 
+        <property name="properties">
+        binary.http.header=TEST_HEADER
+        </property>
+    </bean>
+   
 
 </deployment>

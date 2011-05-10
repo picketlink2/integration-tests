@@ -7,7 +7,7 @@
 		<servlet-name>POJOBeanService</servlet-name>
 		<servlet-class>org.picketlink.test.trust.ws.POJOBean</servlet-class>
 		<load-on-startup>1</load-on-startup>
-	</servlet>
+	</servlet> 
 	<servlet-mapping>
 		<servlet-name>POJOBeanService</servlet-name>
 		<url-pattern>/POJOBeanService</url-pattern>

@@ -1,0 +1,3 @@
+<jboss-web>
+  <security-domain>binary</security-domain>
+</jboss-web>
