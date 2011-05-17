@@ -31,6 +31,7 @@
             <module-option name="useOptionsCredentials">true</module-option>
             <module-option name="overrideDispatch">true</module-option>
             <module-option name="wspAppliesTo">http://services.testcorp.org/provider1</module-option>
+            <module-option name="wsaIssuer">http://something</module-option>
             <module-option name="password-stacking">useFirstPass</module-option>
          </login-module>
          
