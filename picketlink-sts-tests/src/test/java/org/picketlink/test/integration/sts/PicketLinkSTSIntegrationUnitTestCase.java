@@ -271,7 +271,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
 
       // set the client secret in the client entropy.
       EntropyType clientEntropy = new EntropyType();
-      clientEntropy.getAny().add(clientBinarySecret);
+      clientEntropy.addAny(clientBinarySecret);
       request.setEntropy(clientEntropy);
 
       // dispatch the request and get the issued assertion.
@@ -309,7 +309,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
 
       // include a UseKey section that specifies the certificate in the request.
       UseKeyType useKey = new UseKeyType();
-      useKey.setAny(Base64.encodeBytes(certificate.getEncoded()).getBytes());
+      useKey.add(Base64.encodeBytes(certificate.getEncoded()).getBytes());
       request.setUseKey(useKey);
 
       // dispatch the request and get the issued assertion.
@@ -345,7 +345,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       // include a UseKey section that sets the public key in the request.
       KeyValueType keyValue = WSTrustUtil.createKeyValue(certificate.getPublicKey());
       UseKeyType useKey = new UseKeyType();
-      useKey.setAny(keyValue);
+      useKey.add(keyValue);
       request.setUseKey(useKey);
 
       // dispatch the request and get the issued assertion.
