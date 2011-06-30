@@ -8,7 +8,7 @@
    <property name="TOMCAT6" location="${basedir}/target/apache-tomcat-6.0.26/" />
    <property name="TOMCAT6_DEPLOY" location="${basedir}/target/apache-tomcat-6.0.26/webapps/" />
    <property name="TOMCAT6_LIB" location="${basedir}/target/apache-tomcat-6.0.26/lib/" />
-   <property name="JBWS_CXF_ZIP" location="${basedir}/../common-dist/jbossws/3.3.1.GA/jbossws-cxf-3.3.1.GA.zip"/>
+   <property name="JBWS_CXF_ZIP" location="${basedir}/../common-dist/jbossws/3.4.1.GA/jbossws-cxf-3.4.1.GA.zip"/>
    <property name="JBWS_CXF_HOME" location="${basedir}/target/jbossws-cxf-bin-dist/"/>
    <property environment="env" />
 

@@ -55,7 +55,7 @@
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="init-jboss6" />
-                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="install-jbws-cxf-jbas6" />
+                 <!--ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="install-jbws-cxf-jbas6" /-->
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="copy-sts-props-jbas6" />
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="start-jboss6" />
                 </tasks>
