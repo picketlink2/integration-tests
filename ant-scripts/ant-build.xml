@@ -24,6 +24,7 @@
     <echo>Unzip JBOSS AS 6.0.0.Final</echo>
     <unzip src="${basedir}/../common-dist/jbossas/6.0/jboss-as-distribution-6.0.0.Final.zip"
            dest="${basedir}/target"/>
+    <copy file="${basedir}/../common-dist/files/jboss-logging.xml" todir="${basedir}/target/jboss-6.0.0.Final/server/default/deploy"/>
   </target>
 
   <target name="init-tomcat6">

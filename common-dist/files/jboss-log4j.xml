@@ -261,6 +261,7 @@
      <priority value="TRACE"/>
    </category>
 
+<!--
    <category name="org.jboss.security">
      <priority value="TRACE"/>
    </category>
@@ -271,6 +272,7 @@
    <category name="org.apache">
      <priority value="TRACE"/>
    </category>
+-->
 
    <!-- Category specifically for Security Audit Provider 
    <category name="org.jboss.security.audit.providers.LogAuditProvider" additivity="false">
