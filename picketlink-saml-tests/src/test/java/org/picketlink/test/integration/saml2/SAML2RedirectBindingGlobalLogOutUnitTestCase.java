@@ -57,6 +57,8 @@ public class SAML2RedirectBindingGlobalLogOutUnitTestCase
       String LOGOUT_URL = "?GLO=true";
       
       //Sales Application Login
+
+      System.out.println("Trying "+ SERVICE_1_URL);
       WebRequest serviceRequest1 = new GetMethodWebRequest( SERVICE_1_URL );
       WebConversation webConversation = new WebConversation();
       
@@ -71,18 +73,22 @@ public class SAML2RedirectBindingGlobalLogOutUnitTestCase
       assertTrue( " Reached the sales index page ", webResponse.getText().contains( "SalesTool" ));
       
       //Employee Application Login
+      System.out.println("Trying "+ SERVICE_2_URL);
       webResponse = webConversation.getResponse( SERVICE_2_URL );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "EmployeeDashboard" ));
       
       //Logout from sales
+      System.out.println("Trying "+ SERVICE_1_URL + LOGOUT_URL);
       webResponse = webConversation.getResponse( SERVICE_1_URL + LOGOUT_URL ); 
       assertTrue( "Reached logged out page", webResponse.getText().contains( "logged" ) );
       
       //Hit the Sales App again
+      System.out.println("Trying "+ SERVICE_1_URL);
       webResponse = webConversation.getResponse( SERVICE_1_URL );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
  
       //Hit the Employee App again
+      System.out.println("Trying "+ SERVICE_2_URL);
       webResponse = webConversation.getResponse( SERVICE_2_URL );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));     
    }

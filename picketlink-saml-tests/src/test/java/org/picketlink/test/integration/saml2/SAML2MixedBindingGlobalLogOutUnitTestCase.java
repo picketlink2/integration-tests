@@ -70,6 +70,7 @@ public class SAML2MixedBindingGlobalLogOutUnitTestCase
    
    private void hitURLs( String url1, String url2, String url3, String url4 ) throws Exception
    {
+      System.out.println("Trying "+ url1);
       //Sales post Application Login
       WebRequest serviceRequest1 = new GetMethodWebRequest( url1 );
       WebConversation webConversation = new WebConversation();
@@ -85,30 +86,38 @@ public class SAML2MixedBindingGlobalLogOutUnitTestCase
       assertTrue( " Reached the sales index page ", webResponse.getText().contains( "SalesTool" ));
       
       //Employee post Application Login
+      System.out.println("Trying "+ url2);
       webResponse = webConversation.getResponse( url2 );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "EmployeeDashboard" ));
       
       //Sales Application Login
+      System.out.println("Trying "+ url3);
       webResponse = webConversation.getResponse( url3 );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "SalesTool" ));
       
       //Employee Application Login
+      System.out.println("Trying "+ url4);
       webResponse = webConversation.getResponse( url4 );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "EmployeeDashboard" ));
       
       //Logout from sales
+      System.out.println("Trying "+ url1 + LOGOUT_URL);
       webResponse = webConversation.getResponse( url1 + LOGOUT_URL ); 
       assertTrue( "Reached logged out page", webResponse.getText().contains( "logged" ) );
       
       //Hit the Sales Apps again
+      System.out.println("Trying "+ url1);
       webResponse = webConversation.getResponse( url1 );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
+      System.out.println("Trying "+ url3);
       webResponse = webConversation.getResponse( url3 );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
  
       //Hit the Employee Apps again
+      System.out.println("Trying "+ url2);
       webResponse = webConversation.getResponse( url2 );
-      assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" )); 
+      assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
+      System.out.println("Trying "+ url2); 
       webResponse = webConversation.getResponse( url2 );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));  
    }

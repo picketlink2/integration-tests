@@ -53,9 +53,9 @@ public class SAML2PostBindingGlobalLogOutUnitTestCase
     
    @Test
    public void testSAMLPostBindingGlobalLogOut() throws Exception
-   {
-      
-      //Sales Application Login
+   { 
+      //Sales Application Login 
+      System.out.println("Trying "+ getService1URL());
       WebRequest serviceRequest1 = new GetMethodWebRequest( getService1URL() );
       WebConversation webConversation = new WebConversation();
       
@@ -70,18 +70,23 @@ public class SAML2PostBindingGlobalLogOutUnitTestCase
       assertTrue( " Reached the sales index page ", webResponse.getText().contains( "SalesTool" ));
       
       //Employee Application Login
+      System.out.println("Trying "+ getService2URL());
       webResponse = webConversation.getResponse( getService2URL() );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "EmployeeDashboard" ));
       
       //Logout from sales
+
+      System.out.println("Trying "+ getService1URL() + LOGOUT_URL);
       webResponse = webConversation.getResponse( getService1URL() + LOGOUT_URL ); 
       assertTrue( "Reached logged out page", webResponse.getText().contains( "logged" ) );
       
       //Hit the Sales App again
+      System.out.println("Trying "+ getService1URL());
       webResponse = webConversation.getResponse( getService1URL() );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
  
       //Hit the Employee App again
+      System.out.println("Trying "+ getService2URL());
       webResponse = webConversation.getResponse( getService2URL() );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));     
    }
