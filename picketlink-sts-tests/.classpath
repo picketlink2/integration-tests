@@ -111,6 +111,5 @@
 	<classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar" sourcepath="M2_REPO/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/xmlsec/1.4.3/xmlsec-1.4.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/picketlink-saml-jbas6/target/jboss-6.0.0.Final/lib/jboss-system.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

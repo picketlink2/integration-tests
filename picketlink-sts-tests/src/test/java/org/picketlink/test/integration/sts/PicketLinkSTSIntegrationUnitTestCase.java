@@ -17,6 +17,10 @@
  */
 package org.picketlink.test.integration.sts;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -39,11 +43,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.picketlink.identity.federation.api.wstrust.WSTrustClient;
 import org.picketlink.identity.federation.api.wstrust.WSTrustClient.SecurityInfo;
+import org.picketlink.identity.federation.core.saml.v1.SAML11Constants;
 import org.picketlink.identity.federation.core.util.Base64;
 import org.picketlink.identity.federation.core.wstrust.WSTrustConstants;
 import org.picketlink.identity.federation.core.wstrust.WSTrustUtil;
 import org.picketlink.identity.federation.core.wstrust.plugins.saml.SAMLUtil;
 import org.picketlink.identity.federation.core.wstrust.wrappers.RequestSecurityToken;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11AssertionType;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11AuthenticationStatementType;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11ConditionAbstractType;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11ConditionsType;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11NameIdentifierType;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11StatementAbstractType;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11SubjectConfirmationType;
+import org.picketlink.identity.federation.saml.v1.assertion.SAML11SubjectType;
 import org.picketlink.identity.federation.saml.v2.assertion.AssertionType;
 import org.picketlink.identity.federation.saml.v2.assertion.AudienceRestrictionType;
 import org.picketlink.identity.federation.saml.v2.assertion.ConditionAbstractType;
@@ -90,6 +103,32 @@ public class PicketLinkSTSIntegrationUnitTestCase
       KeyStore keyStore = KeyStore.getInstance("JKS");
       keyStore.load(stream, "testpass".toCharArray());
       certificate = keyStore.getCertificate("service2");
+   }
+
+   /**
+    * <p>
+    * This tests sends a SAMLV1.1 security token request to PicketLinkSTS. This request should be handled by the {@code
+    * SAML1TokenProvider} and should result in a SAMLV1.1 assertion.
+    * </p>
+    * 
+    * @throws Exception
+    *            if an error occurs while running the test.
+    */
+   @Test
+   public void testIssueSAML11() throws Exception
+   {
+      Element assertionElement = client.issueToken(SAMLUtil.SAML11_TOKEN_TYPE);
+      Assert.assertNotNull("Invalid null assertion element", assertionElement);
+
+      // validate the contents of the SAML assertion.
+      SAML11AssertionType assertion = this.validateSAML11Assertion(assertionElement, "admin",
+            SAMLUtil.SAML11_BEARER_URI);
+
+      // in this scenario, the conditions section should NOT have an audience restriction.
+      SAML11ConditionsType conditionsType = assertion.getConditions();
+
+      List<SAML11ConditionAbstractType> conditions = conditionsType.get();
+      Assert.assertEquals("Unexpected restriction list size", 0, conditions.size());
    }
 
    /**
@@ -171,6 +210,39 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Assert.assertEquals("Unexpected audience restriction item", "http://services.testcorp.org/provider1",
             audienceRestriction.getAudience().get(0).toString());
 
+   }
+
+   /**
+    * <p>
+    * This test requests a SAMLV1.1 assertion on behalf of another identity. The STS must issue an assertion for the
+    * identity contained in the {@code OnBehalfOf} section of the WS-Trust request (and not for the identity that sent
+    * the request).
+    * </p>
+    * 
+    * @throws Exception
+    *            if an error occurs while running the test.
+    */
+   @Test
+   public void testIssueSAML11OnBehalfOf() throws Exception
+   {
+      // issue a SAML 1.1 assertion for jduke.
+      Element assertionElement = client.issueTokenOnBehalfOf(null, SAMLUtil.SAML11_TOKEN_TYPE, new Principal()
+      {
+         @Override
+         public String getName()
+         {
+            return "jduke";
+         }
+      });
+      Assert.assertNotNull("Invalid null assertion element", assertionElement);
+
+      // this scenario results in the sender vouches confirmation method being used.
+      SAML11AssertionType assertion = this.validateSAML11Assertion(assertionElement, "jduke",
+            SAMLUtil.SAML11_SENDER_VOUCHES_URI);
+
+      // we haven't specified the service endpoint URI, so no restrictions should be visible.
+      SAML11ConditionsType conditions = assertion.getConditions();
+      Assert.assertEquals("Unexpected restriction list size", 0, conditions.get().size());
    }
 
    /**
@@ -362,6 +434,41 @@ public class PicketLinkSTSIntegrationUnitTestCase
 
    /**
     * <p>
+    * This test case first generates a SAMLV1.1 assertion and then sends a WS-Trust renew message to the STS to get the
+    * assertion renewed (i.e. get a new assertion with an updated lifetime).
+    * </p>
+    * 
+    * @throws Exception
+    *            if an error occurs while running the test.
+    */
+   @Test
+   public void testRenewSAML11() throws Exception
+   {
+      // issue a simple SAML assertion.
+      Element assertionElement = client.issueToken(SAMLUtil.SAML11_TOKEN_TYPE);
+      Assert.assertNotNull("Invalid null assertion element", assertionElement);
+      // validate the contents of the original assertion.
+      SAML11AssertionType originalAssertion = this.validateSAML11Assertion(assertionElement, "admin",
+            SAMLUtil.SAML11_BEARER_URI);
+
+      // now use the client API to renew the assertion.
+      Element renewedAssertionElement = client.renewToken(SAMLUtil.SAML11_TOKEN_TYPE, assertionElement);
+      Assert.assertNotNull("Invalid null assertion element", assertionElement);
+      // validate the contents of the renewed assertion.
+      SAML11AssertionType renewedAssertion = this.validateSAML11Assertion(renewedAssertionElement, "admin",
+            SAMLUtil.SAML11_BEARER_URI);
+
+      // assertions should have different ids and lifetimes.
+      Assert.assertFalse("Renewed assertion should have a unique id", originalAssertion.getID().equals(
+            renewedAssertion.getID()));
+      Assert.assertEquals(DatatypeConstants.LESSER, originalAssertion.getConditions().getNotBefore().compare(
+            renewedAssertion.getConditions().getNotBefore()));
+      Assert.assertEquals(DatatypeConstants.LESSER, originalAssertion.getConditions().getNotOnOrAfter().compare(
+            renewedAssertion.getConditions().getNotOnOrAfter()));
+   }
+
+   /**
+    * <p>
     * This test case first generates a SAMLV2.0 assertion and then sends a WS-Trust renew message to the STS to get the
     * assertion renewed (i.e. get a new assertion with an updated lifetime).
     * </p>
@@ -397,6 +504,32 @@ public class PicketLinkSTSIntegrationUnitTestCase
 
    /**
     * <p>
+    * This test case first generates a SAMLV1.1 assertion and then sends a WS-Trust validate message to the STS to get
+    * the assertion validated, checking the validation results.
+    * </p>
+    * 
+    * @throws Exception
+    *            if an error occurs while running the test.
+    */
+   @Test
+   public void testValidateSAML11() throws Exception
+   {
+      // issue a simple SAML assertion.
+      Element assertionElement = client.issueToken(SAMLUtil.SAML11_TOKEN_TYPE);
+      Assert.assertNotNull("Invalid null assertion element", assertionElement);
+
+      // now use the client API to have the assertion validated by the STS.
+      boolean isValid = client.validateToken(assertionElement);
+      Assert.assertTrue("Found unexpected invalid assertion", isValid);
+
+      // now let's temper the SAML assertion and try to validate it again.
+      // assertionElement.setAttribute("Issuer", "ABC");
+      // isValid = client.validateToken(assertionElement);
+      // Assert.assertFalse("The assertion should be invalid", isValid);
+   }
+
+   /**
+    * <p>
     * This test case first generates a SAMLV2.0 assertion and then sends a WS-Trust validate message to the STS to get
     * the assertion validated, checking the validation results.
     * </p>
@@ -419,6 +552,47 @@ public class PicketLinkSTSIntegrationUnitTestCase
       assertionElement.getFirstChild().getFirstChild().setNodeValue("Tempered Issuer");
       isValid = client.validateToken(assertionElement);
       Assert.assertFalse("The assertion should be invalid", isValid);
+   }
+
+   /**
+    * <p>
+    * This test case first generates a SAMLV1.1 assertion and then sends a WS-Trust cancel message to the STS to cancel
+    * the assertion. A canceled assertion cannot be renewed or considered valid anymore.
+    * </p>
+    * 
+    * @throws Exception
+    *            if an error occurs while running the test.
+    */
+   @Test
+   public void testCancelSAML11() throws Exception
+   {
+      // issue a simple SAML assertion.
+      Element assertionElement = client.issueToken(SAMLUtil.SAML11_TOKEN_TYPE);
+      Assert.assertNotNull("Invalid null assertion element", assertionElement);
+
+      // before being canceled, the assertion shold be considered valid by the STS.
+      Assert.assertTrue("Found unexpected invalid assertion", client.validateToken(assertionElement));
+
+      // now use the client API to have the assertion canceled by the STS.
+      boolean canceled = client.cancelToken(assertionElement);
+      Assert.assertTrue(canceled);
+
+      // now that the assertion has been canceled, it should be considered invalid by the STS.
+      Assert.assertFalse("The assertion should be invalid", client.validateToken(assertionElement));
+
+      // trying to renew an invalid assertion should result in an exception being thrown.
+      try
+      {
+         client.renewToken(SAMLUtil.SAML11_TOKEN_TYPE, assertionElement);
+         Assert.fail("An exception should have been raised by the security token service");
+      }
+      catch (WebServiceException we)
+      {
+         Assert.assertEquals("Unexpected exception message",
+               "Exception in handling token request: SAMLV1.1 Assertion with id "
+                     + assertionElement.getAttribute("AssertionID") + " has been canceled and cannot be renewed", we
+                     .getMessage());
+      }
    }
 
    /**
@@ -483,6 +657,53 @@ public class PicketLinkSTSIntegrationUnitTestCase
          Assert.assertTrue("Unexpected exception message", we.getMessage().startsWith(
                "Exception in handling token request: No Security Token Provider found in configuration:"));
       }
+   }
+
+   private SAML11AssertionType validateSAML11Assertion(Element assertionElement, String assertionPrincipal,
+         String confirmationMethod) throws Exception
+   {
+      // unmarshall the SAMLV1.1 assertion.
+      SAML11AssertionType assertion = SAMLUtil.saml11FromElement(assertionElement);
+
+      // validate the assertion issuer.
+      Assert.assertNotNull("Invalid null assertion ID", assertion.getID());
+      Assert.assertEquals("Unexpected assertion issuer name", "PicketLinkSTS", assertion.getIssuer());
+
+      // validate the assertion auth statement.
+      List<SAML11StatementAbstractType> statements = assertion.getStatements();
+      assertTrue("At least one statement is expected in a SAMLV1.1 assertion", statements.size() > 0);
+      SAML11AuthenticationStatementType authStatement = null;
+      for (SAML11StatementAbstractType statement : statements)
+      {
+         if (statement instanceof SAML11AuthenticationStatementType)
+         {
+            authStatement = (SAML11AuthenticationStatementType) statement;
+            break;
+         }
+      }
+      assertNotNull("SAMLV1.1 assertion is missing the authentication statement", authStatement);
+
+      // validate the assertion subject.
+      Assert.assertNotNull("Unexpected null subject", authStatement.getSubject());
+      SAML11SubjectType subject = authStatement.getSubject();
+      SAML11NameIdentifierType nameID = subject.getChoice().getNameID();
+      assertEquals("Unexpected NameIdentifier format", SAML11Constants.FORMAT_UNSPECIFIED, nameID.getFormat()
+            .toString());
+      assertEquals("Unexpected NameIdentifier value", assertionPrincipal, nameID.getValue());
+
+      SAML11SubjectConfirmationType subjType = subject.getSubjectConfirmation();
+      assertEquals("Unexpected confirmation method", confirmationMethod, subjType.getConfirmationMethod().get(0)
+            .toString());
+
+      // validate the assertion conditions.
+      Assert.assertNotNull("Unexpected null conditions", assertion.getConditions());
+      Assert.assertNotNull(assertion.getConditions().getNotBefore());
+      Assert.assertNotNull(assertion.getConditions().getNotOnOrAfter());
+
+      // verify if the assertion has been signed.
+      Assert.assertNotNull("Assertion should have been signed", assertion.getSignature());
+
+      return assertion;
    }
 
    /**
