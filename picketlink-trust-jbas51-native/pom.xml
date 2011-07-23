@@ -98,13 +98,13 @@
       <dependency>
          <groupId>org.picketlink</groupId>
          <artifactId>picketlink-fed</artifactId>
-         <version>${version}</version>
+         <version>${project.version}</version>
          <scope>test</scope>
       </dependency>
       <dependency>
          <groupId>org.picketlink</groupId>
          <artifactId>picketlink-trust-jbossws</artifactId>
-         <version>${version}</version>
+         <version>${project.version}</version>
          <scope>test</scope>
       </dependency>
       <dependency>
