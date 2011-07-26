@@ -80,18 +80,8 @@
         <param name="jbossas" value="${basedir}/target/jboss-5.1.0.GA"/>
     </antcall>
     <copy file="${basedir}/../common-dist/files/jboss-log4j.xml" todir="${JBAS5_DEPLOY}/../conf"/>
+    <copy file="${basedir}/../picketlink-int-webapps/claims/target/claims.war" todir="${JBAS5_DEPLOY}/picketlink/"/>
     
-    <!--
-    <mkdir dir="${JBAS5_DEPLOY}/picketlink" />
-    <copy file="${localRepository}/org/picketlink/picketlink-bindings/${version}/picketlink-bindings-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
-    <copy file="${localRepository}/org/picketlink/picketlink-bindings-jboss/${version}/picketlink-bindings-jboss-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
-    <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
-    <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
-           dest="${JBAS5_DEPLOY}"/>
-    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${JBAS5_DEPLOY}/picketlink"/>
-
-    <chmod file="${basedir}/target/jboss-5.1.0.GA/bin/run.sh" perm="700"/>
-    -->
   </target>
 
   <target name="copy-picketlink-jbas6">
@@ -99,6 +89,7 @@
         <param name="deploy" value="${JBAS6_DEPLOY}"/>
         <param name="jbossas" value="${basedir}/target/jboss-6.0.0.Final"/>
     </antcall>
+    <copy file="${basedir}/../picketlink-int-webapps/claims/target/claims.war" todir="${JBAS6_DEPLOY}/picketlink/"/>
   </target>
     
   <target name="copy-sts-props-jbas5">
