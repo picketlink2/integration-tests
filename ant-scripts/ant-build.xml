@@ -52,6 +52,9 @@
         </fileset>
      </move>
 
+    <copy file="${basedir}/../picketlink-int-webapps/claims/target/claims.war" todir="${TOMCAT6_DEPLOY}"/>
+
+
      <copy file="${basedir}/../common-dist/tomcat/tomcat-users.xml"
            todir="${TOMCAT6}/conf" />
      <copy file="${basedir}/../common-dist/tomcat/log4j.xml"
