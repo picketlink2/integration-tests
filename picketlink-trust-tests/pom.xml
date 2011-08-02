@@ -229,7 +229,7 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>apache-log4j</groupId>
+        <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
         <version>1.2.14</version>
       </dependency>
@@ -250,6 +250,13 @@
         <artifactId>ant-contrib</artifactId>
         <version>1.0b2</version>
       </dependency>
+      <dependency>
+         <groupId>commons-httpclient</groupId>
+         <artifactId>commons-httpclient</artifactId>
+        <version>3.1</version>
+         <scope>test</scope>
+      </dependency>
+
 
    </dependencies>
    
