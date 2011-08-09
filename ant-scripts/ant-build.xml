@@ -63,6 +63,15 @@
      <chmod dir="${basedir}/target/apache-tomcat-6.0.26/bin" perm="700" includes="**/*.jar"/>
   </target>
 
+  <target name="copy-standalone-tomcat6" depends="copy-picketlink-tomcat6">
+   <copy file="${localRepository}/org/picketlink/idp-standalone/${version}/idp-standalone-${version}.war" todir="${TOMCAT6_DEPLOY}"/>
+   <move file="${TOMCAT6_DEPLOY}/idp-standalone-${version}.war" tofile="${TOMCAT6_DEPLOY}/idp-standalone.war"/>
+   <copy file="${localRepository}/org/picketlink/sales-standalone/${version}/sales-standalone-${version}.war" todir="${TOMCAT6_DEPLOY}"/>
+   <move file="${TOMCAT6_DEPLOY}/sales-standalone-${version}.war" tofile="${TOMCAT6_DEPLOY}/sales-standalone.war"/>
+   <copy file="${localRepository}/org/picketlink/employee-standalone/${version}/employee-standalone-${version}.war" todir="${TOMCAT6_DEPLOY}"/>
+   <move file="${TOMCAT6_DEPLOY}/employee-standalone-${version}.war" tofile="${TOMCAT6_DEPLOY}/employee-standalone.war"/>
+  </target>
+
   <target name="copy-picketlink-jboss">
     <mkdir dir="${deploy}/picketlink" />
     <copy file="${localRepository}/org/picketlink/picketlink-bindings/${version}/picketlink-bindings-${version}.jar" todir="${deploy}/picketlink"/>
@@ -157,6 +166,8 @@
      </waitfor>
      <echo>:Local 8080 Started</echo> 
   </target>
+
+  <target name="start-tomcat6-standalone" depends="copy-standalone-tomcat6,start-tomcat6"/>
 
   <target name="stop-jboss">
     <echo>Stopping Local 8080 </echo>
