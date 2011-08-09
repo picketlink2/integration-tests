@@ -39,6 +39,9 @@
             <testClassesDirectory>${basedir}/../picketlink-saml-tests/target/test-classes</testClassesDirectory>
             <printSummary>true</printSummary>
             <disableXmlReport>false</disableXmlReport>
+            <excludes>
+              <exclude>**/Standalone**TestCase.java</exclude>
+            </excludes>
             <includes>
               <include>**/**TestCase.java</include>
             </includes>

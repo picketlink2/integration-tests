@@ -37,8 +37,9 @@
             <phase>test</phase>
             <printSummary>true</printSummary>
             <disableXmlReport>false</disableXmlReport>
+            <testClassesDirectory>${basedir}/../picketlink-saml-tests/target/test-classes</testClassesDirectory>
             <includes>
-              <include>**/**TestCase.java</include>
+              <include>**/Standalone**TestCase.java</include>
             </includes>
             <forkMode>pertest</forkMode>
             <argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-saml-tests/src/test/resources/endorsed</argLine>
