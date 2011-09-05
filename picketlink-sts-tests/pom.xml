@@ -49,7 +49,7 @@
       <dependency>
          <groupId>org.picketlink</groupId>
          <artifactId>picketlink-fed</artifactId>
-         <version>${version}</version>
+         <version>${pl-version}</version>
          <scope>test</scope>
       </dependency>
       <dependency>

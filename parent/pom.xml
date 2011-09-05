@@ -26,6 +26,14 @@
       <connection>scm:svn:http://anonsvn.jboss.org/repos/picketlink/federation/tags/1.0.0.alpha1</connection>
       <developerConnection>scm:svn:https://svn.jboss.org/repos/picketlink/federation/tags/1.0.0.alpha1</developerConnection>
    </scm>
+
+   <properties>
+     <!-- default setting in order to have project imported to IDE without problems -->
+     <pl-version>2.0.0.final</pl-version>
+     <!-- as picketlink-trust-jbossws has different version and is separate project we have to create new property to reflect this fact -->
+     <pl-trust-version>2.0.0.final</pl-trust-version>
+   </properties>
+
   
    <build>
      <plugins>
@@ -57,6 +65,35 @@
              <groupId>org.apache.maven.plugins</groupId>
              <artifactId>maven-antrun-plugin</artifactId>
              <version>1.4</version>
+          </plugin>
+          <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+          <plugin>
+          	<groupId>org.eclipse.m2e</groupId>
+          	<artifactId>lifecycle-mapping</artifactId>
+          	<version>1.0.0</version>
+          	<configuration>
+          		<lifecycleMappingMetadata>
+          			<pluginExecutions>
+          				<pluginExecution>
+          					<pluginExecutionFilter>
+          						<groupId>
+          							org.apache.maven.plugins
+          						</groupId>
+          						<artifactId>
+          							maven-antrun-plugin
+          						</artifactId>
+          						<versionRange>[1.4,)</versionRange>
+          						<goals>
+          							<goal>run</goal>
+          						</goals>
+          					</pluginExecutionFilter>
+          					<action>
+          						<ignore></ignore>
+          					</action>
+          				</pluginExecution>
+          			</pluginExecutions>
+          		</lifecycleMappingMetadata>
+          	</configuration>
           </plugin>
        </plugins>
      </pluginManagement>

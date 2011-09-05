@@ -60,7 +60,7 @@
              <configuration>
                 <tasks>
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${project.version}"/>
+                 <property name="version" value="${pl-version}"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="init-jboss5" />
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="start-jboss5" />
@@ -76,7 +76,7 @@
              <configuration>
                 <tasks>
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${version}"/>
+                 <property name="version" value="${pl-version}"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="stop-jboss5" />
                 </tasks>
@@ -125,7 +125,27 @@
         <artifactId>ant-contrib</artifactId>
         <version>1.0b2</version>
       </dependency>
-
+      <dependency>
+        <groupId>org.picketlink</groupId>
+        <artifactId>picketlink-bindings</artifactId>
+        <version>${pl-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.picketlink</groupId>
+        <artifactId>picketlink-bindings-jboss</artifactId>
+        <version>${pl-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.picketlink</groupId>
+        <artifactId>picketlink-fed</artifactId>
+        <version>${pl-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.picketlink</groupId>
+        <artifactId>picketlink-fed-webapps-assembly</artifactId>
+        <version>${pl-version}</version>
+        <type>zip</type>
+      </dependency>      
    </dependencies>
    
    <reporting>

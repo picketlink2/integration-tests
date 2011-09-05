@@ -66,7 +66,7 @@
               <phase>compile</phase>
               <configuration>
                 <tasks>
-                 <property name="version" value="${project.version}"/>
+                 <property name="version" value="${pl-version}"/>
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="init-jboss5" />
@@ -100,7 +100,7 @@
       <dependency>
          <groupId>org.picketlink</groupId>
          <artifactId>picketlink-fed</artifactId>
-         <version>${version}</version>
+         <version>${pl-version}</version>
          <scope>test</scope>
       </dependency>
       <dependency>

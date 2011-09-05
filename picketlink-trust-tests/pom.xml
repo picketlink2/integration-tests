@@ -147,13 +147,13 @@
       <dependency>
          <groupId>org.picketlink</groupId>
          <artifactId>picketlink-fed</artifactId>
-         <version>${version}</version>
+         <version>${pl-version}</version>
          <scope>test</scope>
       </dependency>
       <dependency>
          <groupId>org.picketlink</groupId>
          <artifactId>picketlink-trust-jbossws</artifactId>
-         <version>${version}</version>
+         <version>${pl-trust-version}</version>
          <scope>test</scope>
          <exclusions>
            <exclusion>

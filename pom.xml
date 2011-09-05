@@ -24,9 +24,11 @@
      <module>picketlink-sts-tests</module>
      <module>picketlink-sts-jbas51-native</module>
      <module>picketlink-sts-jbas51-cxf</module>
-     <module>picketlink-sts-jbas6-cxf</module>
+     <module>picketlink-sts-jbas6-cxf</module> 
+     <module>picketlink-pdp-tests</module> 
+     <module>picketlink-trust-tests</module>
+     <module>picketlink-trust-jbas51-native</module>
 <!--     <module>picketlink-openid-tests</module> -->
-     <module>picketlink-pdp-tests</module>
      
    </modules>
 </project>

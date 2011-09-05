@@ -56,7 +56,7 @@
              <configuration>
                 <tasks>
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${project.version}"/>
+                 <property name="version" value="${pl-version}"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="start-tomcat6-standalone" />
                 </tasks>
@@ -71,7 +71,7 @@
              <configuration>
                 <tasks>
                  <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${version}"/>
+                 <property name="version" value="${pl-version}"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="stop-tomcat6" />
                 </tasks>
@@ -120,7 +120,13 @@
         <artifactId>ant-contrib</artifactId>
         <version>1.0b2</version>
       </dependency>
-
+      <dependency>
+      	<groupId>org.picketlink</groupId>
+      	<artifactId>idp-standalone</artifactId>
+      	<type>war</type>
+      	<version>${pl-version}</version>
+      	<scope>test</scope>
+      </dependency>
    </dependencies>
    
    <reporting>
