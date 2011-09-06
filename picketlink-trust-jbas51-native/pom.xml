@@ -177,7 +177,12 @@
         <artifactId>ant-contrib</artifactId>
         <version>1.0b2</version>
       </dependency>
-
+      <dependency>                                                                                                                                                                
+        <groupId>commons-httpclient</groupId>                                                                                                                                     
+        <artifactId>commons-httpclient</artifactId>                                                                                                                               
+        <version>3.1</version>                                                                                                                                                    
+        <scope>test</scope>                                                                                                                                                       
+      </dependency>   
    </dependencies>
    
    <reporting>
