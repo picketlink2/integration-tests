@@ -23,6 +23,7 @@
       <url>http://www.jboss.org</url>
    </organization>
    <modules>
+      <module>authenticator</module>
       <module>claims</module>
    </modules>
 </project>

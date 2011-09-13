@@ -29,7 +29,7 @@
 
    <properties>
      <!-- default setting in order to have project imported to IDE without problems -->
-     <pl-version>2.0.0.final</pl-version>
+     <pl-version>2.0.1-SNAPSHOT</pl-version>
      <!-- as picketlink-trust-jbossws has different version and is separate project we have to create new property to reflect this fact -->
      <pl-trust-version>2.0.0.final</pl-trust-version>
    </properties>
