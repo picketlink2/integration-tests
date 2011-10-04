@@ -29,7 +29,7 @@
 
    <properties>
      <!-- default setting in order to have project imported to IDE without problems -->
-     <pl-version>2.0.1-SNAPSHOT</pl-version>
+     <pl-version>2.0.2-SNAPSHOT</pl-version>
      <!-- as picketlink-trust-jbossws has different version and is separate project we have to create new property to reflect this fact -->
      <pl-trust-version>2.0.1.final</pl-trust-version>
    </properties>
@@ -48,7 +48,7 @@
        <plugins>
           <plugin>
              <artifactId>maven-surefire-plugin</artifactId>
-             <version>2.9</version>
+             <version>2.10</version>
              <configuration>
                <printSummary>true</printSummary>
                <disableXmlReport>false</disableXmlReport>
