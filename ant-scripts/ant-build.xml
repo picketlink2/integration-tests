@@ -35,7 +35,7 @@
   </target>
 
   <target name="tomcat6-thirdparty-deps" depends="init-tomcat6" >
-    <copy file="${localRepository}/apache-log4j/log4j/1.2.14/log4j-1.2.14.jar" todir="${TOMCAT6_LIB}"/>
+    <copy file="${localRepository}/log4j/log4j/1.2.14/log4j-1.2.14.jar" todir="${TOMCAT6_LIB}"/>
   </target>
 
   <target name="copy-picketlink-tomcat6" depends="tomcat6-thirdparty-deps" >
@@ -43,7 +43,7 @@
     <copy file="${localRepository}/org/picketlink/picketlink-bindings-jboss/${version}/picketlink-bindings-jboss-${version}.jar" todir="${TOMCAT6_LIB}"/>
     <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${TOMCAT6_LIB}"/>
 
-    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${TOMCAT6_LIB}"/>
+    <!-- copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${TOMCAT6_LIB}"/ -->
     <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
            dest="${TOMCAT6_DEPLOY}"/>
 
@@ -80,7 +80,7 @@
     <copy file="${localRepository}/org/picketlink/picketlink-fed/${version}/picketlink-fed-${version}.jar" todir="${deploy}/picketlink"/>
     <unzip src="${localRepository}/org/picketlink/picketlink-fed-webapps-assembly/${version}/picketlink-fed-webapps-assembly-${version}.zip"
            dest="${deploy}"/>
-    <copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${deploy}/picketlink"/>
+    <!-- copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${deploy}/picketlink"/ -->
 
     <chmod file="${jbossas}/bin/run.sh" perm="700"/>
 
