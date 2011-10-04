@@ -44,6 +44,7 @@
             <argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-saml-tests/src/test/resources/endorsed</argLine>
             <useFile>false</useFile>
             <trimStackTrace>false</trimStackTrace>
+            <reportNameSuffix>SAML-STANDALONE</reportNameSuffix>
            </configuration>
         </plugin>
         <plugin>

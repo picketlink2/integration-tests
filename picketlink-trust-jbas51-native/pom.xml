@@ -53,6 +53,7 @@
               <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/wstx.jar</additionalClasspathElement>
               <additionalClasspathElement>${basedir}/target/jboss-5.1.0.GA/client/policy.jar</additionalClasspathElement>
             </additionalClasspathElements>
+            <reportNameSuffix>WS-TRUST-JBAS51-NATIVE</reportNameSuffix>
           </configuration>
         </plugin>
         <plugin>

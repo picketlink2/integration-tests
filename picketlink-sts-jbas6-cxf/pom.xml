@@ -40,6 +40,7 @@
             <useFile>false</useFile>
             <trimStackTrace>false</trimStackTrace>
            <reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
+            <reportNameSuffix>STS-JBAS6-CXF</reportNameSuffix>
            </configuration>
         </plugin>
         <plugin>
