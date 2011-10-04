@@ -1,4 +1,4 @@
-<project default="init" name="PicketLink Federation Integration Test Suite">
+<project name="PicketLink Federation Integration Test Suite">
    <taskdef resource="net/sf/antcontrib/antlib.xml">
      <classpath path="${depclasspath}"/>
    </taskdef>
