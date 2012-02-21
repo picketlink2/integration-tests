@@ -32,7 +32,7 @@
 
   <target name="init-jboss7">
     <!-- Unzip JBoss AS7 -->
-    <echo>Unzip JBOSS AS 7.0.1.Final</echo>
+    <echo>Unzip JBOSS AS 7.1.0.Final</echo>
     <unzip src="${basedir}/../common-dist/jbossas/7.1/jboss-as-7.1.0.Final.zip"
            dest="${basedir}/target"/>
     <chmod dir="${basedir}/target/jboss-as-7.1.0.Final/bin" perm="ugo+rx" includes="**/*.sh"/>
