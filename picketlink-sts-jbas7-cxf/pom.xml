@@ -6,9 +6,9 @@
       <relativePath>../parent</relativePath>
    </parent>
    <modelVersion>4.0.0</modelVersion>
-   <artifactId>picketlink-integration-saml-tests-JBAS7</artifactId>
+   <artifactId>picketlink-integration-sts-jbas7-cxf</artifactId>
    <packaging>jar</packaging>
-   <name>PicketLink Integration Tests for SAML - JBoss AS 7.1</name>
+   <name>PicketLink Integration Tests for WS-Trust (STS) - JBoss AS 7 - CXF Stack</name>
    <url>http://labs.jboss.org/portal/picketlink/</url>
    <description>PicketLink Federation Tests to be run in a continous integration environment such as Hudson</description>
    <licenses>
@@ -21,13 +21,6 @@
       <name>JBoss Inc.</name>
       <url>http://www.jboss.org</url>
    </organization>
-   <properties>
-       <java.endorsed.dirs>${basedir}/../picketlink-saml-tests/src/test/resources/endorsed</java.endorsed.dirs>
-       <SERVICE_1_URL>http://localhost:8080/sales-post/</SERVICE_1_URL>
-       <SERVICE_2_URL>http://localhost:8080/employee-post/</SERVICE_2_URL>
-       <SERVICE_3_URL>http://localhost:8080/sales/</SERVICE_3_URL>
-       <SERVICE_4_URL>http://localhost:8080/employee/</SERVICE_4_URL>
-   </properties>
    <build>
      <plugins>
        <plugin>
@@ -35,56 +28,53 @@
           <configuration>
             <phase>test</phase>
            <!--  <skipTests>true</skipTests> -->
-            <testClassesDirectory>${basedir}/../picketlink-saml-tests/target/test-classes</testClassesDirectory>
+            <testClassesDirectory>${basedir}/../picketlink-sts-tests/target/test-classes</testClassesDirectory>
+            <testResourcesDirectory>${basedir}/../picketlink-sts-tests/target/test-classes</testResourcesDirectory>
             <printSummary>true</printSummary>
             <disableXmlReport>false</disableXmlReport>
-            <excludes>
-              <exclude>**/Standalone**TestCase.java</exclude>
-            </excludes>
             <includes>
               <include>**/**TestCase.java</include>
             </includes>
             <forkMode>pertest</forkMode>
-            <argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-saml-tests/src/test/resources/endorsed</argLine>
+            <argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-sts-tests/src/test/resources/endorsed</argLine>
             <useFile>false</useFile>
             <trimStackTrace>false</trimStackTrace>
-            <reportNameSuffix>SAML-JBAS7</reportNameSuffix>
+           <reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
+            <reportNameSuffix>STS-JBAS7-CXF</reportNameSuffix>
            </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-antrun-plugin</artifactId>
           <executions>
-           <execution>
-             <id>phase-1</id>
-             <phase>compile</phase>
-             <configuration>
+            <execution>
+              <id>phase-1</id>
+              <phase>compile</phase>
+              <configuration>
                 <tasks>
-                 <property name="depclasspath" refid="maven.dependency.classpath"/>
                  <property name="version" value="${pl-version}"/>
+                 <property name="depclasspath" refid="maven.dependency.classpath"/>
                  <property name="localRepository" value="${user.home}/.m2/repository"/>
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="init-jboss7" />
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="copy-picketlink-jbas7" />
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="copy-sts-props-jbas7" />
                  <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="start-jboss7" />
                 </tasks>
-             </configuration>
-             <goals>
-               <goal>run</goal>
-             </goals>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
             </execution>
             <execution>
-             <id>phase-2</id>
-             <phase>test</phase>
-             <configuration>
+              <id>phase-2</id>
+              <phase>test</phase>
+              <configuration>
                 <tasks>
-                 <property name="depclasspath" refid="maven.dependency.classpath"/>
-                 <property name="version" value="${pl-version}"/>
-                 <property name="localRepository" value="${user.home}/.m2/repository"/>
-                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="stop-jboss7" />
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="stop-jboss6" />
                 </tasks>
-             </configuration>
-             <goals>
-               <goal>run</goal>
-             </goals>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
             </execution>
           </executions>
        </plugin>
@@ -92,6 +82,35 @@
   </build>
 
    <dependencies>
+      <dependency>
+         <groupId>org.picketlink</groupId>
+         <artifactId>picketlink-fed</artifactId>
+         <version>${pl-version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.security</groupId>
+         <artifactId>jbosssx-client</artifactId>
+         <version>2.0.4.SP6</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.jbossas</groupId>
+         <artifactId>jboss-as-server</artifactId>
+         <classifier>jmx-invoker-adaptor-client</classifier>
+         <version>6.0.0.Final</version>
+         <scope>test</scope>
+         <exclusions>
+           <exclusion>
+             <groupId>trove</groupId>
+             <artifactId>trove</artifactId>
+           </exclusion>
+           <exclusion>
+             <groupId>wutka-dtdparser</groupId>
+             <artifactId>dtdparser121</artifactId>
+           </exclusion>
+         </exclusions>
+      </dependency>
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
@@ -108,6 +127,11 @@
         <artifactId>js</artifactId>
         <version>1.6R7</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>apache-log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.14</version>
       </dependency>
       <dependency>
         <groupId>nekohtml</groupId>

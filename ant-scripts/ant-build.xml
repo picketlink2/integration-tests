@@ -145,6 +145,17 @@
    <copy file="${basedir}/../picketlink-sts-tests/src/test/resources/sts-config.properties" todir="${JBAS6_DEPLOY}/../conf/"/>
   </target>
 
+  <target name="copy-sts-props-jbas7">
+   <jar destfile="${JBAS7_DEPLOY}/picketlink/picketlink-sts-1.war">
+     <zipfileset src="${JBAS7_DEPLOY}/picketlink/picketlink-sts.war"/>
+     <zipfileset dir="${basedir}/../picketlink-sts-tests/src/test/resources/" includes="sts-config.properties"  prefix="WEB-INF/classes/"/>
+     <zipfileset dir="${basedir}/../picketlink-trust-tests/src/test/resources/props/" includes="sts-users.properties"  prefix="WEB-INF/classes/"/>
+     <zipfileset dir="${basedir}/../picketlink-trust-tests/src/test/resources/props/" includes="sts-roles.properties"  prefix="WEB-INF/classes/"/>
+   </jar>
+   <delete file="${JBAS7_DEPLOY}/picketlink/picketlink-sts.war" failonerror="true" verbose="true"/>
+   <move file="${JBAS7_DEPLOY}/picketlink/picketlink-sts-1.war" tofile="${JBAS7_DEPLOY}/picketlink/picketlink-sts.war"/>
+  </target>
+
   <target name="copy-trust-settings-jbas5">
    <copy file="${basedir}/../picketlink-trust-tests/src/test/resources/domains/sts-jboss-beans.xml" todir="${JBAS5_DEPLOY}/picketlink" />
    <copy file="${basedir}/../picketlink-trust-tests/target/picketlink-wstest-tests.jar" todir="${JBAS5_DEPLOY}/picketlink" />
@@ -172,9 +183,12 @@
             osfamily="unix" spawn="true" />
          <waitfor maxwait="1" maxwaitunit="minute"
               checkevery="100" checkeveryunit="millisecond">
-             <http url="http://localhost:8080/idp/" />
+             <http url="http://localhost:8080/idp-sig/" />
      </waitfor>
      <echo>:Local 8080 Started</echo> 
+     <echo>Going to wait 5 seconds for server to fully start up</echo> 
+     <sleep seconds="5"/>
+     <echo>Sleep of 5 seconds Done.</echo> 
   </target>
 
   <target name="start-jboss5" depends="copy-picketlink-jbas5" >
@@ -189,15 +203,18 @@
     </antcall>
   </target>
 
-  <target name="start-jboss7" depends="copy-picketlink-jbas7" >
+  <target name="start-jboss7">
     <echo>Starting Local 8080 </echo>
       <exec executable="${basedir}/target/jboss-as-7.1.0.Final/bin/standalone.sh" 
             osfamily="unix" spawn="true" />
          <waitfor maxwait="1" maxwaitunit="minute"
               checkevery="100" checkeveryunit="millisecond">
-             <http url="http://localhost:8080/idp/" />
+             <http url="http://localhost:8080/idp-sig/" />
      </waitfor>
      <echo>:Local 8080 Started</echo> 
+     <echo>Going to wait 5 seconds for server to fully start up</echo> 
+     <sleep seconds="5"/>
+     <echo>Sleep of 5 seconds Done.</echo> 
   </target>
 
   <target name="start-tomcat6" depends="copy-picketlink-tomcat6,stop-tomcat6" >
