@@ -85,7 +85,7 @@
               <phase>test</phase>
               <configuration>
                 <tasks>
-                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="stop-jboss6" />
+                 <ant antfile="${basedir}/../ant-scripts/ant-build.xml" target="stop-jboss7" />
                 </tasks>
               </configuration>
               <goals>
