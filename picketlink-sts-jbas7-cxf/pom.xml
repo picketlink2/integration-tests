@@ -38,7 +38,7 @@
             <printSummary>true</printSummary>
             <disableXmlReport>false</disableXmlReport>
             <includes>
-              <include>**/**TestCase.java</include>
+              <include>**/Picket**TestCase.java</include>
             </includes>
             <forkMode>pertest</forkMode>
             <argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-sts-tests/src/test/resources/endorsed</argLine>
