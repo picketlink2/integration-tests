@@ -60,6 +60,7 @@
                 </formatter>
             </console-handler>
             <periodic-rotating-file-handler name="FILE">
+                <level name="TRACE"/>
                 <formatter>
                     <pattern-formatter pattern="%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
                 </formatter>
@@ -81,6 +82,9 @@
             </logger>
             <logger category="jacorb.config">
                 <level name="ERROR"/>
+            </logger>
+            <logger category="org.picketlink">
+                <level name="TRACE"/>
             </logger>
             <root-logger>
                 <level name="INFO"/>
