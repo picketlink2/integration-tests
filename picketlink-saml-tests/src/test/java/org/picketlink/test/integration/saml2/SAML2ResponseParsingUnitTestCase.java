@@ -50,5 +50,7 @@ public class SAML2ResponseParsingUnitTestCase
       
       WebResponse webResponse = webConversation.getResponse( serviceRequest1 ); 
       assertEquals( 200, webResponse.getResponseCode());
+      
+      webConversation.clearContents();
    }
 }

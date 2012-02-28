@@ -119,6 +119,8 @@ public class SAML2MixedBindingGlobalLogOutUnitTestCase
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
       System.out.println("Trying "+ url2); 
       webResponse = webConversation.getResponse( url2 );
-      assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));  
+      assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
+      
+      webConversation.clearContents();
    }
 }

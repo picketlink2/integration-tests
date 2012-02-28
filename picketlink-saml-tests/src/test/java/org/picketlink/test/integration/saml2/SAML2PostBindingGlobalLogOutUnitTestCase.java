@@ -88,7 +88,8 @@ public class SAML2PostBindingGlobalLogOutUnitTestCase
       //Hit the Employee App again
       System.out.println("Trying "+ getService2URL());
       webResponse = webConversation.getResponse( getService2URL() );
-      assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));     
+      assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));  
+      webConversation.clearContents();
    }
    
    public String getService1URL()
