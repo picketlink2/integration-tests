@@ -186,9 +186,9 @@
              <http url="http://localhost:8080/idp-sig/" />
      </waitfor>
      <echo>:Local 8080 Started</echo> 
-     <echo>Going to wait 5 seconds for server to fully start up</echo> 
-     <sleep seconds="5"/>
-     <echo>Sleep of 5 seconds Done.</echo> 
+     <echo>Going to wait 10 seconds for server to fully start up</echo> 
+     <sleep seconds="10"/>
+     <echo>Sleep of 10 seconds Done.</echo> 
   </target>
 
   <target name="start-jboss5" depends="copy-picketlink-jbas5" >
