@@ -1,34 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <parent>
-      <groupId>org.picketlink</groupId>
-      <artifactId>picketlink-integration-tests-parent</artifactId>
-      <version>2.0.2-SNAPSHOT</version>
-      <relativePath>parent</relativePath>
-   </parent>
-   <modelVersion>4.0.0</modelVersion>
-   <groupId>org.picketlink</groupId>
-   <artifactId>picketlink-integration-tests-pom</artifactId>
-   <packaging>pom</packaging>
-   <name>PicketLink Integration Tests- Aggregator</name>
-   <url>http://jboss.org/picketlink/</url>
-   <description>PicketLink is the identity project for Java projects</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.picketlink</groupId>
+		<artifactId>picketlink-integration-tests-parent</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>parent</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.picketlink</groupId>
+	<artifactId>picketlink-integration-tests-pom</artifactId>
+	<packaging>pom</packaging>
+	<name>PicketLink Integration Tests- Aggregator</name>
+	<url>http://jboss.org/picketlink/</url>
+	<description>PicketLink is the identity project for Java projects</description>
 
-   <modules>
-     <module>parent</module>
-     <module>picketlink-int-webapps</module>
-     <module>picketlink-saml-tests</module>
-     <module>picketlink-saml-jbas51</module>
-     <module>picketlink-saml-jbas6</module>
-     <module>picketlink-saml-jbas7</module>
-     <module>picketlink-saml-tomcat6</module>
-     <module>picketlink-saml-standalone</module>
-     <module>picketlink-sts-tests</module>
-     <module>picketlink-sts-jbas51-native</module>
-     <module>picketlink-sts-jbas51-cxf</module>
-     <module>picketlink-sts-jbas6-cxf</module> 
-     <module>picketlink-sts-jbas7-cxf</module> 
-     <module>picketlink-pdp-tests</module> 
-     <module>picketlink-trust-tests</module>
-     <module>picketlink-trust-jbas51-native</module>
-   </modules>
+	<modules>
+		<module>parent</module>
+		<module>picketlink-int-webapps</module>
+		<module>picketlink-saml-tests</module>
+		<module>picketlink-saml-jbas51</module>
+<!-- 		<module>picketlink-saml-jbas6</module> -->
+<!-- 		<module>picketlink-saml-jbas7</module> -->
+<!-- 		<module>picketlink-saml-tomcat6</module> -->
+
+		<!-- <module>picketlink-saml-standalone</module> -->
+
+<!-- 		<module>picketlink-sts-tests</module> -->
+<!-- 		<module>picketlink-sts-jbas51-native</module> -->
+<!-- 		<module>picketlink-sts-jbas51-cxf</module> -->
+<!-- 		<module>picketlink-sts-jbas6-cxf</module> -->
+<!-- 		<module>picketlink-sts-jbas7-cxf</module> -->
+<!-- 		<module>picketlink-pdp-tests</module> -->
+<!-- 		<module>picketlink-trust-tests</module> -->
+<!-- 		<module>picketlink-trust-jbas51-native</module> -->
+	</modules>
 </project>

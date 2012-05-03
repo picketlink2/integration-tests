@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+	<application-policy name="sp">
+		<authentication>
+			<login-module
+				code="org.jboss.identity.federation.bindings.jboss.auth.SAML2LoginModule" />
+		</authentication>
+	</application-policy>
+</deployment>

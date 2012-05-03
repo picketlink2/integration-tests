@@ -79,7 +79,7 @@ public class CacheInvalidationUnitTestCase
       
       // invoke the token service to obtain a short-lived (10s) assertion.
       WSTrustClient client = new WSTrustClient("PicketLinkSTS", "PicketLinkSTSPort",
-            "http://localhost:8080/picketlink-sts/PicketLinkSTS", new SecurityInfo("admin", "admin"));
+            "http://localhost:8080/picketlink-sts/PicketLinkSTS", new SecurityInfo("tomcat", "tomcat"));
       RequestSecurityToken request = new RequestSecurityToken();
       request.setRequestType(URI.create(WSTrustConstants.ISSUE_REQUEST));
       request.setTokenType(URI.create(SAMLUtil.SAML2_TOKEN_TYPE));
@@ -90,19 +90,19 @@ public class CacheInvalidationUnitTestCase
       // invoke the JaasSecurityManagerService MBean to authenticate the client using the assertion.
       ObjectName name = new ObjectName("jboss.security:service=JaasSecurityManager");
       String[] methodSignature = {"java.lang.String", "java.security.Principal", "java.lang.Object"};
-      Object[] methodParams = {"cache-test", new SimplePrincipal("admin"), new SamlCredential(assertionElement)};
+      Object[] methodParams = {"picketlink-sts", new SimplePrincipal("tomcat"), new SamlCredential(assertionElement)};
       Object result = server.invoke(name, "isValid", methodParams, methodSignature);
       Assert.assertTrue("isValid returned an invalid result object", result instanceof Boolean);
       Assert.assertTrue("Authentication failed", (Boolean) result);
       
       // check if the cache contains the authenticated principal.
       methodSignature = new String[]{"java.lang.String"};
-      methodParams = new Object[]{"cache-test"};
+      methodParams = new Object[]{"picketlink-sts"};
       result = server.invoke(name, "getAuthenticationCachePrincipals", methodParams, methodSignature);
       Assert.assertTrue("getAuthenticationCachePrincipals returned an invalid result object", result instanceof List<?>);
       List<?> resultList = (List<?>) result;
       Assert.assertEquals("Unexpected cache size", 1, resultList.size());
-      Assert.assertEquals("Unexpected cached principal", "admin", resultList.get(0).toString());
+      Assert.assertEquals("Unexpected cached principal", "tomcat", resultList.get(0).toString());
       
       // now wait till the assertion has expired and check the authentication cache again.
       Thread.sleep(12000);

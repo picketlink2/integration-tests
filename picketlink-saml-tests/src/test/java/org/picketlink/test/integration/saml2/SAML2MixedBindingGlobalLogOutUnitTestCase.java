@@ -48,11 +48,10 @@ import com.meterware.httpunit.WebResponse;
 public class SAML2MixedBindingGlobalLogOutUnitTestCase
 {
    String SERVICE_1_URL = System.getProperty( "SERVICE_1_URL", "http://localhost:8080/sales-post/" );
-   String SERVICE_2_URL = System.getProperty( "SERVICE_2_URL", "http://localhost:8080/employee-post/" );
+   String SERVICE_2_URL = System.getProperty( "SERVICE_2_URL", "http://localhost:8080/employee/" );
+   String SERVICE_3_URL = System.getProperty( "SERVICE_3_URL", "http://localhost:8080/employee-redirect-valve/" );
+   String SERVICE_4_URL = System.getProperty( "SERVICE_4_URL", "http://localhost:8080/sales-post-valve/" );
 
-   String SERVICE_3_URL = System.getProperty( "SERVICE_3_URL", "http://localhost:8080/sales/" );
-   String SERVICE_4_URL = System.getProperty( "SERVICE_4_URL", "http://localhost:8080/employee/" );
-   
    String LOGOUT_URL = "?GLO=true";
    
    @Test
@@ -61,14 +60,7 @@ public class SAML2MixedBindingGlobalLogOutUnitTestCase
       hitURLs(SERVICE_1_URL, SERVICE_2_URL, SERVICE_3_URL, SERVICE_4_URL);       
    }
    
-   @Test
-   public void testSAMLMixedBindingWithRedirectFirstGlobalLogOut() throws Exception
-   {
-      hitURLs(SERVICE_3_URL, SERVICE_4_URL, SERVICE_1_URL, SERVICE_2_URL); 
-   }
-   
-   
-   private void hitURLs( String url1, String url2, String url3, String url4 ) throws Exception
+   private void hitURLs( String url1, String url2, String url3, String url4) throws Exception
    {
       System.out.println("Trying "+ url1);
       //Sales post Application Login
@@ -89,38 +81,37 @@ public class SAML2MixedBindingGlobalLogOutUnitTestCase
       System.out.println("Trying "+ url2);
       webResponse = webConversation.getResponse( url2 );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "EmployeeDashboard" ));
-      
-      //Sales Application Login
+
+      //Employee Redirect Valve Application Login
       System.out.println("Trying "+ url3);
       webResponse = webConversation.getResponse( url3 );
-      assertTrue( " Reached the employee index page ", webResponse.getText().contains( "SalesTool" ));
-      
-      //Employee Application Login
-      System.out.println("Trying "+ url4);
-      webResponse = webConversation.getResponse( url4 );
       assertTrue( " Reached the employee index page ", webResponse.getText().contains( "EmployeeDashboard" ));
       
+      //Sales Post Valve Application Login
+      System.out.println("Trying "+ url4);
+      webResponse = webConversation.getResponse( url4 );
+      assertTrue( " Reached the employee index page ", webResponse.getText().contains( "SalesTool" ));
+
       //Logout from sales
       System.out.println("Trying "+ url1 + LOGOUT_URL);
       webResponse = webConversation.getResponse( url1 + LOGOUT_URL ); 
-      assertTrue( "Reached logged out page", webResponse.getText().contains( "logged" ) );
+      assertTrue( "Reached logged out page", webResponse.getText().contains( "Logout" ) );
       
       //Hit the Sales Apps again
       System.out.println("Trying "+ url1);
       webResponse = webConversation.getResponse( url1 );
-      assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
-      System.out.println("Trying "+ url3);
-      webResponse = webConversation.getResponse( url3 );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
  
       //Hit the Employee Apps again
       System.out.println("Trying "+ url2);
       webResponse = webConversation.getResponse( url2 );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
-      System.out.println("Trying "+ url2); 
-      webResponse = webConversation.getResponse( url2 );
+
+      //Hit the Sales Valve Apps again
+      System.out.println("Trying "+ url4);
+      webResponse = webConversation.getResponse( url4 );
       assertTrue( " Reached the Login page ", webResponse.getText().contains( "Login" ));
-      
+
       webConversation.clearContents();
    }
 }

@@ -29,7 +29,7 @@ package org.picketlink.test.integration.saml2;
 public class SAML2PostSignatureGLOUnitTestCase extends SAML2PostBindingGlobalLogOutUnitTestCase
 {
    String SERVICE_5_URL = System.getProperty( "SERVICE_3_URL", "http://localhost:8080/sales-post-sig/" );
-   String SERVICE_6_URL = System.getProperty( "SERVICE_4_URL", "http://localhost:8080/employee-post-sig/" );
+   String SERVICE_6_URL = System.getProperty( "SERVICE_4_URL", "http://localhost:8080/employee-sig/" );
    @Override
    public String getService1URL()
    { 

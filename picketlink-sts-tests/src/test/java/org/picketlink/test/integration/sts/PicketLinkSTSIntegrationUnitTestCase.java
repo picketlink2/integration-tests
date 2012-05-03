@@ -95,7 +95,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
    {
       // create the WSTrustClient instance.
       client = new WSTrustClient("PicketLinkSTS", "PicketLinkSTSPort",
-            "http://localhost:8080/picketlink-sts/PicketLinkSTS", new SecurityInfo("admin", "admin"));
+            "http://localhost:8080/picketlink-sts/PicketLinkSTS", new SecurityInfo("tomcat", "tomcat"));
 
       // get the certificate used in the public key scenarios.
       InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(
@@ -121,7 +121,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
 
       // validate the contents of the SAML assertion.
-      SAML11AssertionType assertion = this.validateSAML11Assertion(assertionElement, "admin",
+      SAML11AssertionType assertion = this.validateSAML11Assertion(assertionElement, "tomcat",
             SAMLUtil.SAML11_BEARER_URI);
 
       // in this scenario, the conditions section should NOT have an audience restriction.
@@ -147,7 +147,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
     *     &lt;/saml2:Issuer&gt;
     *     &lt;saml2:Subject&gt;
     *         &lt;saml2:NameID NameQualifier=&quot;http://www.jboss.org&quot;&gt;
-    *             admin
+    *             tomcat
     *         &lt;/saml2:NameID&gt;
     *         &lt;saml2:SubjectConfirmation Method=&quot;urn:oasis:names:tc:SAML:2.0:cm:bearer&quot;/&gt;
     *     &lt;/saml2:Subject&gt;
@@ -170,7 +170,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
 
       // validate the contents of the SAML assertion.
-      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin", SAMLUtil.SAML2_BEARER_URI);
+      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat", SAMLUtil.SAML2_BEARER_URI);
 
       // in this scenario, the conditions section should NOT have an audience restriction.
       ConditionsType conditionsType = assertion.getConditions();
@@ -196,7 +196,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
 
       // validate the contents of the SAML assertion.
-      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin", SAMLUtil.SAML2_BEARER_URI);
+      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat", SAMLUtil.SAML2_BEARER_URI);
 
       // in this scenario, the conditions section should have an audience restriction.
       ConditionsType conditionsType = assertion.getConditions();
@@ -303,7 +303,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
 
       // the usage of a key as proof-of-possession token results in the holder-of-key confirmation method being used.
-      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
+      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
       SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
@@ -351,7 +351,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
 
       // the usage of a key as proof-of-possession token results in the holder-of-key confirmation method being used.
-      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
+      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
       SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
@@ -388,7 +388,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Element assertionElement = client.issueToken(request);
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
 
-      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
+      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
       SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
@@ -424,7 +424,7 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Element assertionElement = client.issueToken(request);
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
 
-      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "admin",
+      AssertionType assertion = this.validateSAML20Assertion(assertionElement, "tomcat",
             SAMLUtil.SAML2_HOLDER_OF_KEY_URI);
       // validate the holder of key contents.
       SubjectConfirmationType subjConfirmation = (SubjectConfirmationType) assertion.getSubject().getConfirmation()
@@ -448,14 +448,14 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Element assertionElement = client.issueToken(SAMLUtil.SAML11_TOKEN_TYPE);
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
       // validate the contents of the original assertion.
-      SAML11AssertionType originalAssertion = this.validateSAML11Assertion(assertionElement, "admin",
+      SAML11AssertionType originalAssertion = this.validateSAML11Assertion(assertionElement, "tomcat",
             SAMLUtil.SAML11_BEARER_URI);
 
       // now use the client API to renew the assertion.
       Element renewedAssertionElement = client.renewToken(SAMLUtil.SAML11_TOKEN_TYPE, assertionElement);
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
       // validate the contents of the renewed assertion.
-      SAML11AssertionType renewedAssertion = this.validateSAML11Assertion(renewedAssertionElement, "admin",
+      SAML11AssertionType renewedAssertion = this.validateSAML11Assertion(renewedAssertionElement, "tomcat",
             SAMLUtil.SAML11_BEARER_URI);
 
       // assertions should have different ids and lifetimes.
@@ -483,14 +483,14 @@ public class PicketLinkSTSIntegrationUnitTestCase
       Element assertionElement = client.issueToken(SAMLUtil.SAML2_TOKEN_TYPE);
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
       // validate the contents of the original assertion.
-      AssertionType originalAssertion = this.validateSAML20Assertion(assertionElement, "admin",
+      AssertionType originalAssertion = this.validateSAML20Assertion(assertionElement, "tomcat",
             SAMLUtil.SAML2_BEARER_URI);
 
       // now use the client API to renew the assertion.
       Element renewedAssertionElement = client.renewToken(SAMLUtil.SAML2_TOKEN_TYPE, assertionElement);
       Assert.assertNotNull("Invalid null assertion element", assertionElement);
       // validate the contents of the renewed assertion.
-      AssertionType renewedAssertion = this.validateSAML20Assertion(renewedAssertionElement, "admin",
+      AssertionType renewedAssertion = this.validateSAML20Assertion(renewedAssertionElement, "tomcat",
             SAMLUtil.SAML2_BEARER_URI);
 
       // assertions should have different ids and lifetimes.
