@@ -75,6 +75,14 @@
 									<overWrite>true</overWrite>
 									<outputDirectory>${jboss.as.home}/modules/org/jboss/security/xacml/main</outputDirectory>
 								</artifactItem>
+								<artifactItem>
+									<groupId>xalan</groupId>
+									<artifactId>xalan</artifactId>
+									<version>2.7.1</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${jboss.as.home}/modules/org/apache/xalan/main</outputDirectory>
+								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>
@@ -139,6 +147,15 @@
 										<include>module.xml</include>
 									</includes>
 									<stylesheet>../common-dist/jbossas/7.1/xslt/changeJBossXACMLModule.xslt</stylesheet>
+								</transformationSet>
+								<!-- Workaround to make the PDP work in AS7. -->
+								<transformationSet>
+									<dir>${jboss.as.home}/modules/org/apache/xalan/main</dir>
+									<outputDir>${jboss.as.home}/modules/org/apache/xalan/main</outputDir>
+									<includes>
+										<include>module.xml</include>
+									</includes>
+									<stylesheet>../common-dist/jbossas/7.1/xslt/changeXalanModule.xslt</stylesheet>
 								</transformationSet>
 							</transformationSets>
 						</configuration>
