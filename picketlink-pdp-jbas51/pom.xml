@@ -7,16 +7,16 @@
 		<relativePath>../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>picketlink-integration-saml-tests-JBAS6</artifactId>
+	<artifactId>picketlink-integration-pdp-jbas51</artifactId>
 	<packaging>jar</packaging>
-	<name>PicketLink Integration Tests for SAML - JBoss AS 6</name>
+	<name>PicketLink Integration Tests for PDP - JBAS 5.1</name>
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<phase>test</phase>
-					<testClassesDirectory>${basedir}/../picketlink-saml-tests/target/test-classes</testClassesDirectory>
+					<testClassesDirectory>${basedir}/../picketlink-pdp-tests/target/test-classes</testClassesDirectory>
 					<printSummary>true</printSummary>
 					<disableXmlReport>false</disableXmlReport>
 					<excludes>
@@ -26,10 +26,10 @@
 						<include>**/**TestCase.java</include>
 					</includes>
 					<forkMode>pertest</forkMode>
-					<argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-saml-tests/src/test/resources/endorsed</argLine>
+					<argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-pdp-tests/src/test/resources/endorsed</argLine>
 					<useFile>false</useFile>
 					<trimStackTrace>false</trimStackTrace>
-					<reportNameSuffix>SAML-JBAS6</reportNameSuffix>
+					<reportNameSuffix>SAML-JBAS51</reportNameSuffix>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -44,9 +44,9 @@
 								<property name="version" value="${pl-version}" />
 								<property name="localRepository" value="${user.home}/.m2/repository" />
 								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
-									target="init-jboss6" />
+									target="init-jboss5" />
 								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
-									target="start-jboss6" />
+									target="start-jboss5" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -62,7 +62,7 @@
 								<property name="version" value="${pl-version}" />
 								<property name="localRepository" value="${user.home}/.m2/repository" />
 								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
-									target="stop-jboss6" />
+									target="stop-jboss5" />
 							</tasks>
 						</configuration>
 						<goals>

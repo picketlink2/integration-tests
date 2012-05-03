@@ -4,24 +4,12 @@
 		<groupId>org.picketlink</groupId>
 		<artifactId>picketlink-integration-tests-parent</artifactId>
 		<version>2.0.2-SNAPSHOT</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../parent/parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>picketlink-integration-sts-jbas51-cxf</artifactId>
 	<packaging>jar</packaging>
 	<name>PicketLink Integration Tests for WS-Trust (STS) - JBoss AS 5.1 - CXF Stack</name>
-	<url>http://labs.jboss.org/portal/picketlink/</url>
-	<description>PicketLink Federation Tests to be run in a continous integration environment such as Hudson</description>
-	<licenses>
-		<license>
-			<name>lgpl</name>
-			<url>http://repository.jboss.com/licenses/lgpl.txt</url>
-		</license>
-	</licenses>
-	<organization>
-		<name>JBoss Inc.</name>
-		<url>http://www.jboss.org</url>
-	</organization>
 	<build>
 		<plugins>
 			<plugin>
@@ -84,20 +72,7 @@
 			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
-		<dependency>
-			<groupId>org.picketlink</groupId>
-			<artifactId>picketlink-core</artifactId>
-			<version>${pl-version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.security</groupId>
-			<artifactId>jbosssx-client</artifactId>
-			<version>2.0.4.SP6</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.jboss.jbossas</groupId>
 			<artifactId>jboss-as-server</artifactId>
@@ -122,80 +97,6 @@
 			<version>5.1.0.GA</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>httpunit</groupId>
-			<artifactId>httpunit</artifactId>
-			<version>1.7</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>rhino</groupId>
-			<artifactId>js</artifactId>
-			<version>1.6R7</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>apache-log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
-		</dependency>
-		<dependency>
-			<groupId>nekohtml</groupId>
-			<artifactId>nekohtml</artifactId>
-			<version>1.9.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>apache-xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.9.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>ant-contrib</groupId>
-			<artifactId>ant-contrib</artifactId>
-			<version>1.0b2</version>
-		</dependency>
-
 	</dependencies>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<doclet>org.jboss.apiviz.APIviz</doclet>
-					<docletArtifact>
-						<groupId>org.jboss.apiviz</groupId>
-						<artifactId>apiviz</artifactId>
-						<version>1.2.5.GA</version>
-					</docletArtifact>
-					<additionalparam>
-						-charset UTF-8
-						-docencoding UTF-8
-						-version
-						-author
-						-breakiterator
-						-windowtitle "${project.name} ${project.version} API
-						Reference"
-						-doctitle "${project.name} ${project.version} API
-						Reference"
-						-bottom "Copyright © ${project.inceptionYear}-Present
-						${project.organization.name}. All Rights Reserved."
-						-link
-						http://java.sun.com/javase/6/docs/api/
-						-sourceclasspath
-						${project.build.outputDirectory}
-					</additionalparam>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>

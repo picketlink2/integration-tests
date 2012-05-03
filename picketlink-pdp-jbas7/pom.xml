@@ -7,14 +7,34 @@
 		<relativePath>../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>picketlink-integration-saml-tests-JBAS7</artifactId>
+	<artifactId>picketlink-integration-pdp-jbas7</artifactId>
 	<packaging>jar</packaging>
-	<name>PicketLink Integration Tests for SAML - JBoss AS 7.1</name>
+	<name>PicketLink Integration Tests for PDP - JBAS 7.1</name>
 	<properties>
+		<version.jbossxacml>2.0.4</version.jbossxacml>
 		<jboss.as.home>${project.build.directory}/jboss-as-7.1.2.Final-SNAPSHOT</jboss.as.home>
 	</properties>
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<phase>test</phase>
+					<testClassesDirectory>${basedir}/../picketlink-pdp-tests/target/test-classes</testClassesDirectory>
+					<testResourcesDirectory>${basedir}/../picketlink-pdp-tests/target/test-classes</testResourcesDirectory>
+					<printSummary>true</printSummary>
+					<disableXmlReport>false</disableXmlReport>
+					<includes>
+						<include>**/*TestCase.java</include>
+					</includes>
+					<forkMode>pertest</forkMode>
+					<argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-pdp-tests/src/test/resources/endorsed</argLine>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
+					<reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
+					<reportNameSuffix>PDP-JBAS7-CXF</reportNameSuffix>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -125,26 +145,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<phase>test</phase>
-					<testClassesDirectory>${basedir}/../picketlink-saml-tests/target/test-classes</testClassesDirectory>
-					<printSummary>true</printSummary>
-					<disableXmlReport>false</disableXmlReport>
-					<excludes>
-						<exclude>**/Standalone**TestCase.java</exclude>
-					</excludes>
-					<includes>
-						<include>**/**TestCase.java</include>
-					</includes>
-					<forkMode>pertest</forkMode>
-					<argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-saml-tests/src/test/resources/endorsed</argLine>
-					<useFile>false</useFile>
-					<trimStackTrace>false</trimStackTrace>
-					<reportNameSuffix>SAML-JBAS7</reportNameSuffix>
-				</configuration>
-			</plugin>
 			<!-- Configure the AS7 distribution, starts and stops it -->
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -203,5 +203,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -1,7 +1,7 @@
 <project name="PicketLink Federation Integration Test Suite">
-	<taskdef resource="net/sf/antcontrib/antlib.xml">
-		<classpath path="${depclasspath}" />
-	</taskdef>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"
+		classpath="${user.home}/.m2/repository/ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar" />
+
 	<property name="JBAS5_DEPLOY" location="${basedir}/target/jboss-5.1.0.GA/server/default/deploy/" />
 	<property name="JBAS5_DEPLOYER" location="${basedir}/target/jboss-5.1.0.GA/server/default/deployers/" />
 	<property name="JBAS6_DEPLOY" location="${basedir}/target/jboss-6.0.0.Final/server/default/deploy/" />
@@ -13,7 +13,6 @@
 	<property name="JBWS_CXF_ZIP" location="${basedir}/../common-dist/jbossws/3.4.1.GA/jbossws-cxf-3.4.1.GA.zip" />
 	<property name="JBWS_CXF_HOME" location="${basedir}/target/jbossws-cxf-bin-dist/" />
 	<property environment="env" />
-	<property name="pl-trust-version" value="${version}" />
 
 	<target name="init-jboss5">
 		<!-- Unzip JBoss AS5 -->
@@ -130,7 +129,6 @@
 		<copy file="${basedir}/../picketlink-trust-tests/target/binary-test.war" todir="${JBAS5_DEPLOY}/picketlink" />
 		<copy file="${basedir}/../picketlink-trust-tests/src/test/resources/props/sts-users.properties" todir="${JBAS5_DEPLOY}/../conf" />
 		<copy file="${basedir}/../picketlink-trust-tests/src/test/resources/props/sts-roles.properties" todir="${JBAS5_DEPLOY}/../conf" />
-		<copy file="${localRepository}/org/picketlink/picketlink-trust-jbossws/${pl-trust-version}/picketlink-trust-jbossws-${pl-trust-version}.jar" todir="${JBAS5_DEPLOY}/picketlink" />
 		<copy file="${basedir}/../common-dist/files/war-deployers-jboss-beans.xml" todir="${JBAS5_DEPLOYER}/jbossweb.deployer/META-INF" />
 	</target>
 
