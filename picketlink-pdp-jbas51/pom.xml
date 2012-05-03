@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.picketlink</groupId>
+		<artifactId>picketlink-integration-tests-parent</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>picketlink-integration-pdp-jbas51</artifactId>
+	<packaging>jar</packaging>
+	<name>PicketLink Integration Tests for PDP - JBAS 5.1</name>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<phase>test</phase>
+					<testClassesDirectory>${basedir}/../picketlink-pdp-tests/target/test-classes</testClassesDirectory>
+					<printSummary>true</printSummary>
+					<disableXmlReport>false</disableXmlReport>
+					<excludes>
+						<exclude>**/Standalone**TestCase.java</exclude>
+					</excludes>
+					<includes>
+						<include>**/**TestCase.java</include>
+					</includes>
+					<forkMode>pertest</forkMode>
+					<argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-pdp-tests/src/test/resources/endorsed</argLine>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
+					<reportNameSuffix>SAML-JBAS51</reportNameSuffix>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>phase-1</id>
+						<phase>compile</phase>
+						<configuration>
+							<tasks>
+								<property name="depclasspath" refid="maven.dependency.classpath" />
+								<property name="version" value="${pl-version}" />
+								<property name="localRepository" value="${user.home}/.m2/repository" />
+								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
+									target="init-jboss5" />
+								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
+									target="start-jboss5" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>phase-2</id>
+						<phase>test</phase>
+						<configuration>
+							<tasks>
+								<property name="depclasspath" refid="maven.dependency.classpath" />
+								<property name="version" value="${pl-version}" />
+								<property name="localRepository" value="${user.home}/.m2/repository" />
+								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
+									target="stop-jboss5" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

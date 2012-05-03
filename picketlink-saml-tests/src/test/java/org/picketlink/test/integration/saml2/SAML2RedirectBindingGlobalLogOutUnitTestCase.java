@@ -48,7 +48,7 @@ import com.meterware.httpunit.WebResponse;
 public class SAML2RedirectBindingGlobalLogOutUnitTestCase
 {
 
-   String SERVICE_1_URL = System.getProperty( "SERVICE_3_URL", "http://localhost:8080/sales/" );
+   String SERVICE_1_URL = System.getProperty( "SERVICE_3_URL", "http://localhost:8080/sales-post/" );
    String SERVICE_2_URL = System.getProperty( "SERVICE_4_URL", "http://localhost:8080/employee/" );
    
    @Test
@@ -80,7 +80,7 @@ public class SAML2RedirectBindingGlobalLogOutUnitTestCase
       //Logout from sales
       System.out.println("Trying "+ SERVICE_1_URL + LOGOUT_URL);
       webResponse = webConversation.getResponse( SERVICE_1_URL + LOGOUT_URL ); 
-      assertTrue( "Reached logged out page", webResponse.getText().contains( "logged" ) );
+      assertTrue( "Reached logged out page", webResponse.getText().contains( "Logout" ) );
       
       //Hit the Sales App again
       System.out.println("Trying "+ SERVICE_1_URL);

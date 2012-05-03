@@ -1,0 +1,206 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.picketlink</groupId>
+		<artifactId>picketlink-integration-tests-parent</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>../parent</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>picketlink-integration-pdp-jbas7</artifactId>
+	<packaging>jar</packaging>
+	<name>PicketLink Integration Tests for PDP - JBAS 7.1</name>
+	<properties>
+		<version.jbossxacml>2.0.4</version.jbossxacml>
+		<jboss.as.home>${project.build.directory}/jboss-as-7.1.2.Final-SNAPSHOT</jboss.as.home>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<phase>test</phase>
+					<testClassesDirectory>${basedir}/../picketlink-pdp-tests/target/test-classes</testClassesDirectory>
+					<testResourcesDirectory>${basedir}/../picketlink-pdp-tests/target/test-classes</testResourcesDirectory>
+					<printSummary>true</printSummary>
+					<disableXmlReport>false</disableXmlReport>
+					<includes>
+						<include>**/*TestCase.java</include>
+					</includes>
+					<forkMode>pertest</forkMode>
+					<argLine>-Djava.endorsed.dirs=${basedir}/../picketlink-pdp-tests/src/test/resources/endorsed</argLine>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
+					<reportsDirectory>${project.build.directory}/surefire-reports-native</reportsDirectory>
+					<reportNameSuffix>PDP-JBAS7-CXF</reportNameSuffix>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<!-- Update AS7 with the latest PicketLink jars before testing. -->
+					<execution>
+						<id>copy</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.picketlink</groupId>
+									<artifactId>picketlink-core</artifactId>
+									<version>${pl-version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${jboss.as.home}/modules/org/picketlink/main</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.picketlink.distribution</groupId>
+									<artifactId>picketlink-jbas7</artifactId>
+									<version>${pl-version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${jboss.as.home}/modules/org/picketlink/main</outputDirectory>
+								</artifactItem>
+								<!-- This should be removed when AS7 is updated the jbossxacml module 
+									is updated with 2.0.8 -->
+								<artifactItem>
+									<groupId>org.jboss.security</groupId>
+									<artifactId>jbossxacml</artifactId>
+									<version>2.0.8.Final</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${jboss.as.home}/modules/org/jboss/security/xacml/main</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<!-- Copy the applications for testing. -->
+					<execution>
+						<id>unpack</id>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.picketlink</groupId>
+									<artifactId>picketlink-quickstarts</artifactId>
+									<version>${pl-version}</version>
+									<classifier>webapps-jboss-as7</classifier>
+									<type>zip</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${jboss.as.home}/standalone/deployments</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Updates some configuration files in AS7 before testing. -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>process-test-classes</phase>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+						<configuration>
+							<transformationSets>
+								<transformationSet>
+									<dir>${jboss.as.home}/standalone/configuration/</dir>
+									<outputDir>${jboss.as.home}/standalone/configuration</outputDir>
+									<includes>
+										<include>standalone.xml</include>
+									</includes>
+									<stylesheet>../common-dist/jbossas/7.1/xslt/addSecurityDomain.xslt</stylesheet>
+								</transformationSet>
+								<transformationSet>
+									<dir>${jboss.as.home}/modules/org/picketlink/main</dir>
+									<outputDir>${jboss.as.home}/modules/org/picketlink/main</outputDir>
+									<includes>
+										<include>module.xml</include>
+									</includes>
+									<stylesheet>../common-dist/jbossas/7.1/xslt/changePicketLinkModule.xslt</stylesheet>
+								</transformationSet>
+								<!-- This should be removed when AS7 is updated the jbossxacml module 
+									is updated with 2.0.8 -->
+								<transformationSet>
+									<dir>${jboss.as.home}/modules/org/jboss/security/xacml/main</dir>
+									<outputDir>${jboss.as.home}/modules/org/jboss/security/xacml/main</outputDir>
+									<includes>
+										<include>module.xml</include>
+									</includes>
+									<stylesheet>../common-dist/jbossas/7.1/xslt/changeJBossXACMLModule.xslt</stylesheet>
+								</transformationSet>
+							</transformationSets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Configure the AS7 distribution, starts and stops it -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>phase-1</id>
+						<phase>compile</phase>
+						<configuration>
+							<tasks>
+								<property name="depclasspath" refid="maven.dependency.classpath" />
+								<property name="version" value="${pl-version}" />
+								<property name="localRepository" value="${user.home}/.m2/repository" />
+								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
+									target="init-jboss7" />
+								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
+									target="copy-picketlink-jbas7" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>compile</id>
+						<phase>process-test-classes</phase>
+						<configuration>
+							<tasks>
+								<property name="depclasspath" refid="maven.dependency.classpath" />
+								<property name="version" value="${pl-version}" />
+								<property name="localRepository" value="${user.home}/.m2/repository" />
+								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
+									target="start-jboss7" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>phase-3</id>
+						<phase>test</phase>
+						<configuration>
+							<tasks>
+								<property name="depclasspath" refid="maven.dependency.classpath" />
+								<property name="version" value="${pl-version}" />
+								<property name="localRepository" value="${user.home}/.m2/repository" />
+								<ant antfile="${basedir}/../ant-scripts/ant-build.xml"
+									target="stop-jboss7" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
