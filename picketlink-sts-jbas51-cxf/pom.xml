@@ -4,7 +4,7 @@
 		<groupId>org.picketlink</groupId>
 		<artifactId>picketlink-integration-tests-parent</artifactId>
 		<version>2.0.2-SNAPSHOT</version>
-		<relativePath>../parent/parent</relativePath>
+		<relativePath>../parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>picketlink-integration-sts-jbas51-cxf</artifactId>
