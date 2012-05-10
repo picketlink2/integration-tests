@@ -143,7 +143,7 @@
 
 	<target name="start-jboss" depends="stop-jboss">
 		<echo>Starting Local 8080 </echo>
-		<exec executable="${jbossas}/bin/run.sh" osfamily="unix" spawn="true" />
+		<exec executable="${jbossas}/bin/run.sh -Djboss.service.binding.set=ports-07" osfamily="unix" spawn="true" />
 		<waitfor maxwait="1" maxwaitunit="minute" checkevery="100" checkeveryunit="millisecond">
 			<http url="http://localhost:8080/idp-sig/" />
 		</waitfor>
