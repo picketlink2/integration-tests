@@ -68,7 +68,7 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.picketlink</groupId>
+									<groupId>org.picketlink.quickstarts</groupId>
 									<artifactId>picketlink-quickstarts</artifactId>
 									<version>${pl-version}</version>
 									<classifier>webapps-jboss-as7</classifier>
