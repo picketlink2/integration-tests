@@ -48,7 +48,7 @@
 		<copy file="${localRepository}/org/picketlink/picketlink-core/${version}/picketlink-core-${version}.jar" todir="${TOMCAT6_LIB}" />
 
 		<!-- copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${TOMCAT6_LIB}"/ -->
-		<unzip src="${localRepository}/org/picketlink/picketlink-quickstarts/${version}/picketlink-quickstarts-${version}-webapps-tomcat-6.zip" dest="${TOMCAT6_DEPLOY}" />
+		<unzip src="${localRepository}/org/picketlink/quickstarts/picketlink-quickstarts/${version}/picketlink-quickstarts-${version}-webapps-tomcat-6.zip" dest="${TOMCAT6_DEPLOY}" />
 
 		<move todir="${TOMCAT6_DEPLOY}">
 			<fileset dir="${TOMCAT6_DEPLOY}/picketlink">
@@ -78,7 +78,7 @@
 		<mkdir dir="${deploy}/picketlink" />
 		<copy file="${localRepository}/org/picketlink/distribution/picketlink-jbas5/${version}/picketlink-jbas5-${version}.jar" todir="${deploy}/picketlink" />
 		<copy file="${localRepository}/org/picketlink/picketlink-core/${version}/picketlink-core-${version}.jar" todir="${deploy}/picketlink" />
-		<unzip src="${localRepository}/org/picketlink/picketlink-quickstarts/${version}/picketlink-quickstarts-${version}-webapps-jboss-as5.zip" dest="${deploy}" />
+		<unzip src="${localRepository}/org/picketlink/quickstarts/picketlink-quickstarts/${version}/picketlink-quickstarts-${version}-webapps-jboss-as5.zip" dest="${deploy}" />
 		<!-- copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${deploy}/picketlink"/ -->
 
 		<chmod file="${jbossas}/bin/run.sh" perm="700" />
