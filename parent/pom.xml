@@ -164,6 +164,30 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.picketlink.quickstarts</groupId>
+				<artifactId>picketlink-quickstarts</artifactId>
+				<version>${pl-version}</version>
+				<classifier>webapps-jboss-as7</classifier>
+				<type>zip</type>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.picketlink.quickstarts</groupId>
+				<artifactId>picketlink-quickstarts</artifactId>
+				<version>${pl-version}</version>
+				<classifier>webapps-jboss-as5</classifier>
+				<type>zip</type>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.picketlink.quickstarts</groupId>
+				<artifactId>picketlink-quickstarts</artifactId>
+				<version>${pl-version}</version>
+				<classifier>webapps-tomcat-6</classifier>
+				<type>zip</type>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.4</version>
@@ -280,6 +304,27 @@
 		<dependency>
 			<groupId>org.picketlink.distribution</groupId>
 			<artifactId>picketlink-tomcat5</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.picketlink.quickstarts</groupId>
+			<artifactId>picketlink-quickstarts</artifactId>
+			<classifier>webapps-jboss-as7</classifier>
+			<type>zip</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.picketlink.quickstarts</groupId>
+			<artifactId>picketlink-quickstarts</artifactId>
+			<classifier>webapps-jboss-as5</classifier>
+			<type>zip</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.picketlink.quickstarts</groupId>
+			<artifactId>picketlink-quickstarts</artifactId>
+			<classifier>webapps-tomcat-6</classifier>
+			<type>zip</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
