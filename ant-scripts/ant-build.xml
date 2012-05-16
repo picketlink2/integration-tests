@@ -18,6 +18,7 @@
 		<!-- Unzip JBoss AS5 -->
 		<echo>Unzip JBOSS AS 5.1.0.GA</echo>
 		<unzip src="${basedir}/../common-dist/jbossas/5.1.0.GA/jboss-5.1.0.GA-jdk6.zip" dest="${basedir}/target" />
+		<chmod dir="${basedir}/target" perm="ugo+rx" includes="**/*.sh" />
 	</target>
 
 	<target name="init-jboss6">
@@ -25,6 +26,7 @@
 		<echo>Unzip JBOSS AS 6.0.0.Final</echo>
 		<unzip src="${basedir}/../common-dist/jbossas/6.0/jboss-as-distribution-6.0.0.Final.zip" dest="${basedir}/target" />
 		<copy file="${basedir}/../common-dist/files/jboss-logging.xml" todir="${basedir}/target/jboss-6.0.0.Final/server/default/deploy" />
+		<chmod dir="${basedir}/target" perm="ugo+rx" includes="**/*.sh" />
 	</target>
 
 	<target name="init-jboss7">
@@ -81,8 +83,7 @@
 		<unzip src="${localRepository}/org/picketlink/quickstarts/picketlink-quickstarts/${version}/picketlink-quickstarts-${version}-webapps-jboss-as5.zip" dest="${deploy}" />
 		<!-- copy file="${localRepository}/org/openid4java/openid4java-nodeps/0.9.5/openid4java-nodeps-0.9.5.jar" todir="${deploy}/picketlink"/ -->
 
-		<chmod file="${jbossas}/bin/run.sh" perm="700" />
-
+		<!-- chmod file="${jbossas}/bin/run.sh" perm="700" / -->
 	</target>
 
 
@@ -143,7 +144,9 @@
 
 	<target name="start-jboss" depends="stop-jboss">
 		<echo>Starting Local 8080 </echo>
-		<exec executable="${jbossas}/bin/run.sh -Djboss.service.binding.set=ports-07" osfamily="unix" spawn="true" />
+		<exec executable="${jbossas}/bin/run.sh" osfamily="unix" spawn="true">
+			<arg value="-Djboss.service.binding.set=ports-07"/>
+		</exec>	
 		<waitfor maxwait="1" maxwaitunit="minute" checkevery="100" checkeveryunit="millisecond">
 			<http url="http://localhost:8080/idp-sig/" />
 		</waitfor>
