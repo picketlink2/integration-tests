@@ -5,8 +5,8 @@
 	<property name="JBAS5_DEPLOY" location="${basedir}/target/jboss-5.1.0.GA/server/default/deploy/" />
 	<property name="JBAS5_DEPLOYER" location="${basedir}/target/jboss-5.1.0.GA/server/default/deployers/" />
 	<property name="JBAS6_DEPLOY" location="${basedir}/target/jboss-6.0.0.Final/server/default/deploy/" />
-	<property name="JBAS7_DEPLOY" location="${basedir}/target/jboss-as-7.1.2.Final-SNAPSHOT/standalone/deployments/" />
-	<property name="JBAS7_MODULES" location="${basedir}/target/jboss-as-7.1.2.Final-SNAPSHOT/modules/" />
+	<property name="JBAS7_DEPLOY" location="${basedir}/target/jbossas/standalone/deployments/" />
+	<property name="JBAS7_MODULES" location="${basedir}/target/jbossas/modules/" />
 	<property name="TOMCAT6" location="${basedir}/target/apache-tomcat-6.0.26/" />
 	<property name="TOMCAT6_DEPLOY" location="${basedir}/target/apache-tomcat-6.0.26/webapps/" />
 	<property name="TOMCAT6_LIB" location="${basedir}/target/apache-tomcat-6.0.26/lib/" />
@@ -29,9 +29,10 @@
 
 	<target name="init-jboss7">
 		<!-- Unzip JBoss AS7 -->
-		<echo>Unzip JBOSS AS 7.1.0.Final</echo>
-		<unzip src="${basedir}/../common-dist/jbossas/7.1/jboss-as-7.1.2.Final-SNAPSHOT.zip" dest="${basedir}/target" />
-		<chmod dir="${basedir}/target/jboss-as-7.1.2.Final-SNAPSHOT/bin" perm="ugo+rx" includes="**/*.sh" />
+		<echo>Unzip EAP6</echo>
+		<unzip src="${basedir}/../common-dist/eap6/jboss-eap-6.zip" dest="${basedir}/target" />
+		<move file="${basedir}/target/jboss-eap-6.0" tofile="${basedir}/target/jbossas"/>
+		<chmod dir="${basedir}/target/jbossas/bin" perm="ugo+rx" includes="**/*.sh" />
 	</target>
 
 	<target name="init-tomcat6">
@@ -167,7 +168,7 @@
 
 	<target name="start-jboss7">
 		<echo>Starting Local 8080 </echo>
-		<exec executable="${basedir}/target/jboss-as-7.1.2.Final-SNAPSHOT/bin/standalone.sh" osfamily="unix" spawn="true" />
+		<exec executable="${basedir}/target/jbossas/bin/standalone.sh" osfamily="unix" spawn="true" />
 		<waitfor maxwait="1" maxwaitunit="minute" checkevery="100" checkeveryunit="millisecond">
 			<http url="http://localhost:8080/idp-sig/" />
 		</waitfor>

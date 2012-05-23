@@ -17,22 +17,17 @@
 		
 		<module>picketlink-int-webapps</module>
 		<module>picketlink-saml-tests</module>
-		<module>picketlink-saml-jbas51</module>
-		<module>picketlink-saml-jbas6</module>
 		<module>picketlink-saml-jbas7</module>
-		<module>picketlink-saml-tomcat6</module>
-
-<!-- 		<module>picketlink-saml-standalone</module> -->
 
 		<module>picketlink-sts-tests</module>
-		<module>picketlink-sts-jbas51-native</module>
-		<module>picketlink-sts-jbas51-cxf</module>
-		<module>picketlink-sts-jbas6-cxf</module>
 		<module>picketlink-sts-jbas7-cxf</module>
+		
 		<module>picketlink-pdp-tests</module>
-		<module>picketlink-pdp-jbas51</module>
 		<module>picketlink-pdp-jbas7</module>
+
+		<!--  
 		<module>picketlink-trust-tests</module>
-		<module>picketlink-trust-jbas51-native</module>
+		<module>picketlink-trust-jbas51-native</module> 
+		-->
 	</modules>
 </project>

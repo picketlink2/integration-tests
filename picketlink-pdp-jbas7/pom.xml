@@ -12,7 +12,7 @@
 	<name>PicketLink Integration Tests for PDP - JBAS 7.1</name>
 	<properties>
 		<version.jbossxacml>2.0.4</version.jbossxacml>
-		<jboss.as.home>${project.build.directory}/jboss-as-7.1.2.Final-SNAPSHOT</jboss.as.home>
+		<jboss.as.home>${project.build.directory}/jbossas</jboss.as.home>
 	</properties>
 	<build>
 		<plugins>
@@ -40,52 +40,6 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.1</version>
 				<executions>
-					<!-- Update AS7 with the latest PicketLink jars before testing. -->
-					<execution>
-						<id>copy</id>
-						<phase>process-test-classes</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.picketlink</groupId>
-									<artifactId>picketlink-core</artifactId>
-									<version>${pl-version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${jboss.as.home}/modules/org/picketlink/main</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.picketlink.distribution</groupId>
-									<artifactId>picketlink-jbas7</artifactId>
-									<version>${pl-version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${jboss.as.home}/modules/org/picketlink/main</outputDirectory>
-								</artifactItem>
-								<!-- This should be removed when AS7 is updated the jbossxacml module 
-									is updated with 2.0.8 -->
-								<artifactItem>
-									<groupId>org.jboss.security</groupId>
-									<artifactId>jbossxacml</artifactId>
-									<version>2.0.8.Final</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${jboss.as.home}/modules/org/jboss/security/xacml/main</outputDirectory>
-								</artifactItem>
-								<artifactItem>
-									<groupId>xalan</groupId>
-									<artifactId>xalan</artifactId>
-									<version>2.7.1</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${jboss.as.home}/modules/org/apache/xalan/main</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
 					<!-- Copy the applications for testing. -->
 					<execution>
 						<id>unpack</id>
@@ -96,7 +50,7 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.picketlink</groupId>
+									<groupId>org.picketlink.quickstarts</groupId>
 									<artifactId>picketlink-quickstarts</artifactId>
 									<version>${pl-version}</version>
 									<classifier>webapps-jboss-as7</classifier>
@@ -130,33 +84,33 @@
 									</includes>
 									<stylesheet>../common-dist/jbossas/7.1/xslt/addSecurityDomain.xslt</stylesheet>
 								</transformationSet>
-								<transformationSet>
+								<!--  transformationSet>
 									<dir>${jboss.as.home}/modules/org/picketlink/main</dir>
 									<outputDir>${jboss.as.home}/modules/org/picketlink/main</outputDir>
 									<includes>
 										<include>module.xml</include>
 									</includes>
 									<stylesheet>../common-dist/jbossas/7.1/xslt/changePicketLinkModule.xslt</stylesheet>
-								</transformationSet>
+								</transformationSet -->
 								<!-- This should be removed when AS7 is updated the jbossxacml module 
 									is updated with 2.0.8 -->
-								<transformationSet>
+								<!-- transformationSet>
 									<dir>${jboss.as.home}/modules/org/jboss/security/xacml/main</dir>
 									<outputDir>${jboss.as.home}/modules/org/jboss/security/xacml/main</outputDir>
 									<includes>
 										<include>module.xml</include>
 									</includes>
 									<stylesheet>../common-dist/jbossas/7.1/xslt/changeJBossXACMLModule.xslt</stylesheet>
-								</transformationSet>
+								</transformationSet -->
 								<!-- Workaround to make the PDP work in AS7. -->
-								<transformationSet>
+								<!-- transformationSet>
 									<dir>${jboss.as.home}/modules/org/apache/xalan/main</dir>
 									<outputDir>${jboss.as.home}/modules/org/apache/xalan/main</outputDir>
 									<includes>
 										<include>module.xml</include>
 									</includes>
 									<stylesheet>../common-dist/jbossas/7.1/xslt/changeXalanModule.xslt</stylesheet>
-								</transformationSet>
+								</transformationSet -->
 							</transformationSets>
 						</configuration>
 					</execution>
